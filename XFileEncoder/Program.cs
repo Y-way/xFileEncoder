@@ -33,9 +33,9 @@ namespace SwfFileParser
         static void PrintUsage()
         {
             Console.WriteLine("Usage:");
-            Console.WriteLine("[-load File Name [-out output File Name] [-_prefix _prefix]]");
+            Console.WriteLine("XFileEncoder -load FileName [-out OutputFileName] [-prefix prefix] [-ver version]");
             Console.WriteLine("\t-load:加载欲加密文件,必须参数");
-            Console.WriteLine("\t-out:输出文件名字,输出内容为文本格式.可选参数,默认文件名out.xfe");
+            Console.WriteLine("\t-out:输出文件名字.可选参数,默认文件名out.xfe");
             Console.WriteLine("\t-prefix:每行行首前缀词.可选参数,默认为空");
             Console.WriteLine("\t-ver:文件加密版本号.可选参数,默认为空");
             Console.WriteLine("\t-help:查看帮助");
