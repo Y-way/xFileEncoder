@@ -19,7 +19,7 @@ namespace SwfFileParser
         private string _version;
         private byte[] _byFile;
         private long lSize = 0;
-        private FileStream _lSwfFile;
+        private FileStream _lSourceFile;
 
         [Serializable]
         class XEncodeFileHeader 
@@ -50,7 +50,7 @@ namespace SwfFileParser
             _xHeader.version = uint.Parse(_version);
         }
 
-        private bool ReBuildSwfFile()
+        private bool EncodeFile()
         {
             byte[] resultOut = ZlibCompress.CompressBytes(_byFile);
             if (resultOut == null)
@@ -174,38 +174,41 @@ namespace SwfFileParser
                 return;
             }
             
-            SourceFileExtension result = Gerneral.CheckTextFile(_xSourceFile);
-            if (SourceFileExtension.JPG == result 
-                || SourceFileExtension.PNG == result 
-                || SourceFileExtension.LUAC == result
-                || SourceFileExtension.LUA == result)
-            {
-                try
-                {
-                    _lSwfFile = new FileStream(_xSourceFile, FileMode.Open);
-                }
-                catch (System.Exception ex)
-                {
-                    Console.WriteLine(ex.Message);
-                    _lSwfFile.Close();
-                    return;
-                }
-                try
-                {
-                    lSize = _lSwfFile.Length;
+            //SourceFileExtension result = Gerneral.CheckTextFile(_xSourceFile);
+            //if (SourceFileExtension.JPG == result 
+            //    || SourceFileExtension.PNG == result 
+            //    || SourceFileExtension.LUAC == result
+            //    || SourceFileExtension.LUA == result)
+            //{
+                
+            //}
 
-                    _byFile = new byte[lSize];
-                    _lSwfFile.Read(_byFile, 0, (int)lSize);
-                    _lSwfFile.Close();
-                }
-                catch(System.Exception ex)
-                {
-                    Console.WriteLine(ex.Message);
-                    _byFile = null;
-                    _lSwfFile.Close();
-                }
-                ReBuildSwfFile();
+            ///Encode the source file.
+            try
+            {
+                _lSourceFile = new FileStream(_xSourceFile, FileMode.Open);
             }
+            catch(System.Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                _lSourceFile.Close();
+                return;
+            }
+            try
+            {
+                lSize = _lSourceFile.Length;
+
+                _byFile = new byte[lSize];
+                _lSourceFile.Read(_byFile, 0, (int)lSize);
+                _lSourceFile.Close();
+            }
+            catch(System.Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                _byFile = null;
+                _lSourceFile.Close();
+            }
+            EncodeFile();
         }
     }
 }
