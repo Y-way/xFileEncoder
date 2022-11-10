@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.IO.Compression;
 
 namespace XFileEncode
 {
@@ -24,7 +25,14 @@ namespace XFileEncode
             byte[] resultOut = bytes;
             if(_encodeType == 1)
             {
-                resultOut = ZlibCompress.CompressBytes(bytes);
+                using(MemoryStream memory = new MemoryStream())
+                {
+                    using(GZipStream gZipStream = new GZipStream(memory, CompressionMode.Compress))
+                    {
+                        gZipStream.Write(bytes, 0, bytes.Length);
+                    }
+                    resultOut = memory.ToArray();
+                }
                 if(resultOut == null)
                 {
                     return false;
