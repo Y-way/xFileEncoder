@@ -14,6 +14,7 @@ namespace XFileEncode
             _xFile = "";
             _outFile = "out.xfe";
             _encodeType = 0;
+            _encryptSize = 16;
             if (args.Length < 1)
             {
                 Console.WriteLine("参数不对{0}", args.Length.ToString());
@@ -58,36 +59,62 @@ namespace XFileEncode
             {
                 if (args[i] == "-load")
                 {
-                    i++;
-                    _xFile = args[i];
-                }
-                if (args[i] == "-out")
-                {
-                    i++;
-                    if (i >= args.Length)
+                    if(i + 1 >= args.Length)
                     {
-                        continue;
-                    }
-                    _outFile = args[i];
-                }
-                if (args[i] == "-encrypt_size")
-                {
-                    i++;
-                    _encryptSize = 16;
-                    if (i >= args.Length)
-                    {
-                        continue;
+                        break;
                     }
 
-                    if(string.IsNullOrWhiteSpace(args[i]))
-                        _encryptSize = 16;
+                    if(IsValidVariate(args[i + 1]))
+                    {
+                        i++;
+                        _xFile = args[i];
+                    }
                     else
                     {
+                        Console.WriteLine($"{args[i]} 参数值无效");
+                    }
+                }
+
+                if (args[i] == "-out")
+                {
+                    if(i + 1 >= args.Length)
+                    {
+                        break;
+                    }
+
+                    if(IsValidVariate(args[i + 1]))
+                    {
+                        i++;
+                        _outFile = args[i];
+                    }
+                    else
+                    {
+                        Console.WriteLine($"{args[i]} 参数值无效");
+                    }
+                }
+
+                if (args[i] == "-encrypt_size")
+                {
+                    _encryptSize = 16;
+                    
+                    if(i + 1 >= args.Length)
+                    {
+                        break;
+                    }
+                    
+                    if(IsValidVariate(args[i + 1]))
+                    {
+                        i++;
                         if(!byte.TryParse(args[i], out _encryptSize))
                         {
                             _encryptSize = 16;
                         }
                     }
+                    else
+                    {
+                        Console.WriteLine($"{args[i]} 参数值无效");
+                    }
+
                     if(_encryptSize < 16)
                     {
                         _encryptSize = 16;
@@ -95,27 +122,48 @@ namespace XFileEncode
                 }
                 if (args[i] == "-encode_type")
                 {
-                    i++;
                     _encodeType = 0;
-                    if (i >= args.Length)
+                    if(i + 1 >= args.Length)
                     {
-                        continue;
+                        break;
                     }
-                    if(args[i] == "zip")
+                    if(IsValidVariate(args[i + 1]))
                     {
-                        _encodeType = 1;
+                        i++;
+                        if(args[i] == "zip")
+                        {
+                            _encodeType = 1;
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine($"{args[i]} 参数值无效");
                     }
                 }
             }
+
             if (_xFile == "")
             {
+                PrintUsage();
                 return false;
             }
+
             if (_outFile == "")
             {
                 _outFile = "out.xfe";
             }
+
             return true;
         }
+
+        static bool IsValidVariate(string variate)
+        {
+            if(string.IsNullOrWhiteSpace(variate))
+            {
+                return false;
+            }
+            return !variate.StartsWith('-');
+        }
+
     }
 }
