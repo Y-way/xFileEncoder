@@ -33,7 +33,7 @@ namespace XFileEncode
             Console.WriteLine("XFileEncoder -load FileName [-out OutputFileName] [-encrypt_size size] [-encode_type type]");
             Console.WriteLine("\t-load:加载欲加密文件,必须参数");
             Console.WriteLine("\t-out:输出文件名字.可选参数,默认文件名out.xfe");
-            Console.WriteLine("\t-encrypt_size:加密数据长度,可选参数,默认16字节. 取值范围:Clamp(16, 256, file_size)");
+            Console.WriteLine("\t-encrypt_size:加密数据长度,可选参数,默认16字节. 取值范围:Min(Clamp(encrypt_size, 16, 256), file_size)");
             Console.WriteLine("\t-encode_type:源数据加密方式,可选参数.none:不改变源文件内容, 默认;zip:zip压缩源文件内容");
             Console.WriteLine("\t-help:查看帮助");
             Console.WriteLine("例子:\nXFileEncoder -load test.png -out test.png -encrypt_size 32 -encode_type zip");
@@ -87,6 +87,10 @@ namespace XFileEncode
                         {
                             _encryptSize = 16;
                         }
+                    }
+                    if(_encryptSize < 16)
+                    {
+                        _encryptSize = 16;
                     }
                 }
                 if (args[i] == "-encode_type")
