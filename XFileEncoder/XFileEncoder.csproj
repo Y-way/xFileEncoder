@@ -2,8 +2,21 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
+    <StartupObject>XFileEncode.Program</StartupObject>
+    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+    <SignAssembly>False</SignAssembly>
+    <IsPublishable>True</IsPublishable>
     <TargetFramework>netcoreapp3.1</TargetFramework>
-    <StartupObject>SwfFileParser.Program</StartupObject>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <Prefer32Bit>True</Prefer32Bit>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <Prefer32Bit>True</Prefer32Bit>
+    <WarningLevel>4</WarningLevel>
   </PropertyGroup>
 
 </Project>

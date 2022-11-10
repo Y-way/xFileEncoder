@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System;
 using System.Runtime.Serialization.Formatters.Binary;//二进制序列化，加上引用
 using System.IO;
 
-namespace swfFileParser
+namespace XFileEncode
 {
     [Serializable]
     class BinarySerializer<T> 

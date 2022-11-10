@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using ComponentAce.Compression.Libs.zlib;
 using System.IO;
 
-namespace swfFileParser
+namespace XFileEncode
 {
     public class Compress
     {

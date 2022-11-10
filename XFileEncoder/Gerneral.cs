@@ -1,91 +1,111 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Xml;
+using System;
 using System.IO;
-using System.Runtime.Serialization.Formatters.Binary;//二进制序列化，加上引用
-using ComponentAce.Compression.Libs.zlib;
-using swfFileParser;
 
-
-namespace SwfFileParser
+namespace XFileEncode
 {
     class Gerneral
     {
         private string _outFile;
         private string _xSourceFile;
-        private string _prefix;
-        private string _version;
-        private byte[] _byFile;
-        private long lSize = 0;
-        private FileStream _lSourceFile;
+        
+        private byte _encryptDataSize;
+        private byte _encodeType;
 
-        [Serializable]
-        class XEncodeFileHeader 
-        {
-            public uint sign;//文件头标志
-            public uint offset;//文件偏移
-            public uint length;//文件长度
-            public uint version;//保留
-            public XEncodeFileHeader()
-            {
-                sign = 0;
-                sign = sign | 'F';
-                sign = (sign << 8) | 'W';
-                sign = (sign << 8) | 'S';
-                sign = (sign << 8) | 'N';
-            }
-        };
-
-        private XEncodeFileHeader _xHeader;
-        public Gerneral(string source, string xFileName, string prefix = "", string version = "0")
+        public Gerneral(string source, string xFileName, byte encryptSize = 16, byte encodeType = 0)
         {
             _xSourceFile = source;
             _outFile = xFileName;
-            _prefix = prefix;
-            _version = version;
-
-            _xHeader = new XEncodeFileHeader();
-            _xHeader.version = uint.Parse(_version);
+            _encryptDataSize = encryptSize;
+            _encodeType = encodeType;
         }
 
-        private bool EncodeFile()
+        private bool EncodeFile(byte[] bytes)
         {
-            byte[] resultOut = ZlibCompress.CompressBytes(_byFile);
-            if (resultOut == null)
+            byte[] resultOut = bytes;
+            if(_encodeType == 1)
+            {
+                resultOut = ZlibCompress.CompressBytes(bytes);
+                if(resultOut == null)
+                {
+                    return false;
+                }
+            }
+            if(_encryptDataSize > resultOut.Length)
+            {
+                _encryptDataSize = (byte)resultOut.Length;
+            }
+
+            //加密数据
+            if(!Encrypte(ref resultOut, _encryptDataSize))
             {
                 return false;
             }
 
-            FileStream sw;
-            try 
+            using(FileStream sw = new FileStream(_outFile, FileMode.Create))
             {
-                sw = new FileStream(_outFile, FileMode.Create);
+                XEncodeFileHeader _xHeader = new XEncodeFileHeader(
+                    sign:XEncodeFileHeader.SignatureCode(), 
+                    offset:sizeof(uint) * 4,
+                    encryptSize: _encryptDataSize,
+                    encodeType: _encodeType,
+                    version:1,
+                    length: (uint)(resultOut.Length),
+                    reserved:0);
+
+                using(BinaryWriter bw = new BinaryWriter(sw))
+                {
+                    //public uint sign;// Signature code.
+                    //public byte offset;// Rawdata offset form the file begin.
+                    //public byte encrypt_data_size; // Encrypt the length of data.
+                    //public byte encode_type; // The data encode type.0:default,do nothing. 1: zip compress.
+                    //public byte version; // The encode version
+                    //public uint length; // The data length.
+                    //public uint reserved; //Reserved for users.
+                    
+                    bw.Write(_xHeader.sign);
+                    bw.Write(_xHeader.offset);
+                    bw.Write(_xHeader.encrypt_data_size);
+                    bw.Write(_xHeader.encode_type);
+                    bw.Write(_xHeader.version);
+                    bw.Write(_xHeader.length);
+                    bw.Write(_xHeader.reserved);
+                    
+                    bw.Write(resultOut, 0, (int)_xHeader.length);
+                    bw.Flush();
+                }
+                Console.WriteLine("输出成功!" + _outFile);
             }
-            catch(System.Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                return false;
-            }
-
-            _xHeader.length = (uint)(resultOut.Length);
-            _xHeader.offset = sizeof(uint) * 4;
-
-            BinaryWriter bw = new BinaryWriter(sw);
-            bw.Write((uint)_xHeader.sign);
-            bw.Write((uint)_xHeader.offset);
-            bw.Write((uint)_xHeader.length);
-            bw.Write((uint)_xHeader.version);
-            //TODO 加密数据
-            bw.Write(resultOut, 0, (int)_xHeader.length);
-            bw.Flush();
-
-            bw.Close();
-            sw.Close();
-            Console.WriteLine("输出成功!" + _outFile);
             return true;
         }
+        /// <summary>
+        /// 数据加密处理
+        /// </summary>
+        /// <param name="bytes"></param>
+        /// <param name="size"></param>
+        /// <returns></returns>
+        bool Encrypte(ref byte[] bytes, byte size)
+        {
+            if(bytes == null)
+            {
+                Console.WriteLine("加密数据为空");
+                return false;
+            }
+
+            if(bytes.Length < size)
+            {
+                Console.WriteLine($"加密数据长度不足.{bytes.Length} < {size}");
+                return false;
+            }
+            byte data;
+            for(int i = 0; i < size; i++)
+            {
+                data = bytes[i];
+                data = ((byte)((data << 0x04) | (data >> 0x04)));
+                bytes[i] = data;
+            }
+            return true;
+        }
+
         public enum SourceFileExtension
         {
             /// <summary>
@@ -131,84 +151,83 @@ namespace SwfFileParser
             {
                 return SourceFileExtension.LUA;
             }
-            FileStream fs = new FileStream(fileName, FileMode.Open, FileAccess.Read);
-            System.IO.BinaryReader br = new System.IO.BinaryReader(fs);
-            string fileType = string.Empty; ;
-            try
+            using(FileStream fs = new FileStream(fileName, FileMode.Open, FileAccess.Read))
             {
-                byte data = br.ReadByte();
-                fileType += data.ToString();
-                data = br.ReadByte();
-                fileType += data.ToString();
-                SourceFileExtension extension;
-                try
+                using(BinaryReader br = new System.IO.BinaryReader(fs))
                 {
-                    extension = (SourceFileExtension)Enum.Parse(typeof(SourceFileExtension), fileType);
+                    string fileType = string.Empty;
+                    byte data = br.ReadByte();
+                    fileType += data.ToString();
+                    data = br.ReadByte();
+                    fileType += data.ToString();
+                    SourceFileExtension extension;
+                    try
+                    {
+                        extension = (SourceFileExtension)Enum.Parse(typeof(SourceFileExtension), fileType);
+                    }
+                    catch
+                    {
+                        extension = SourceFileExtension.VALIDFILE;
+                    }
+                    return extension;
                 }
-                catch 
-                { 
+            }
+        }
 
-                    extension=SourceFileExtension.VALIDFILE;
-                }
-                return extension;
-            }
-            catch (Exception ex)
+        bool IsXEncodedFile(string fileName)
+        {
+            using(FileStream fs = new FileStream(fileName, FileMode.Open, FileAccess.Read))
             {
-                throw ex;
-            }
-            finally
-            {
-                if (fs != null)
+                using(BinaryReader br = new System.IO.BinaryReader(fs))
                 {
-                    fs.Close();
-                    br.Close();
+                    uint data = br.ReadUInt32();
+                    return XEncodeFileHeader.SignatureCode() == data;
                 }
             }
         }
 
         public void RunApp()
         {
-            if (_xSourceFile == ""
-                || _outFile == "")
+            if (string.IsNullOrWhiteSpace(_xSourceFile)
+                || string.IsNullOrWhiteSpace(_outFile))
             {
+                Console.WriteLine($"参数错误. 源文件:{_xSourceFile}=>输出文件:{_outFile}");
                 return;
             }
-            
+
             //SourceFileExtension result = Gerneral.CheckTextFile(_xSourceFile);
             //if (SourceFileExtension.JPG == result 
             //    || SourceFileExtension.PNG == result 
             //    || SourceFileExtension.LUAC == result
             //    || SourceFileExtension.LUA == result)
             //{
-                
+
             //}
 
-            ///Encode the source file.
-            try
+            if(IsXEncodedFile(_xSourceFile))
             {
-                _lSourceFile = new FileStream(_xSourceFile, FileMode.Open);
-            }
-            catch(System.Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                _lSourceFile.Close();
+                Console.WriteLine($"源文件:{_xSourceFile} 已经加密.");
                 return;
             }
-            try
-            {
-                lSize = _lSourceFile.Length;
 
-                _byFile = new byte[lSize];
-                _lSourceFile.Read(_byFile, 0, (int)lSize);
-                _lSourceFile.Close();
-            }
-            catch(System.Exception ex)
+            ///Encode the source file.
+            using(FileStream source = new FileStream(_xSourceFile, FileMode.Open))
             {
-                Console.WriteLine(ex.Message);
-                _byFile = null;
-                _lSourceFile.Close();
+                try
+                {
+                    long lSize = source.Length;
+                    byte[] byFile = new byte[lSize];
+                    source.Read(byFile, 0, (int)lSize);
+                    source.Close();
+                    EncodeFile(byFile);
+                }
+                catch(System.Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+                
             }
-            EncodeFile();
+            
         }
     }
 }

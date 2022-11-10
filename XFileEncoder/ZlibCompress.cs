@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Xml;
-using System.Data;
+using System;
 using System.IO;
-using System.Runtime.Serialization.Formatters.Binary;
 using ComponentAce.Compression.Libs.zlib;
 
-namespace swfFileParser
+namespace XFileEncode
 {
     /// <summary>
     /// Zlib压缩算法压缩应用类
