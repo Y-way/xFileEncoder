@@ -23,8 +23,8 @@ namespace XFileEncode
             }
             if(ParseParameter(args))
             {
-                Gerneral pMyApp = new Gerneral(_xFile, _outFile, _encryptSize, _encodeType);
-                pMyApp.RunApp();
+                Gerneral pMyApp = new Gerneral();
+                pMyApp.Encrypt(_xFile, _outFile, _encryptSize, _encodeType);
             }
         }
 

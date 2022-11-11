@@ -4,6 +4,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 17.2.32616.157
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XFileEncoder", "XFileEncoder\XFileEncoder.csproj", "{A7654FCE-A873-4416-A118-8163B8A4E92E}"
+	ProjectSection(ProjectDependencies) = postProject
+		{EBFBC20E-F303-4D42-AD92-546709D02D70} = {EBFBC20E-F303-4D42-AD92-546709D02D70}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XEncrypt", "XEncrypt\XEncrypt.csproj", "{EBFBC20E-F303-4D42-AD92-546709D02D70}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +20,10 @@ Global
 		{A7654FCE-A873-4416-A118-8163B8A4E92E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A7654FCE-A873-4416-A118-8163B8A4E92E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A7654FCE-A873-4416-A118-8163B8A4E92E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EBFBC20E-F303-4D42-AD92-546709D02D70}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EBFBC20E-F303-4D42-AD92-546709D02D70}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EBFBC20E-F303-4D42-AD92-546709D02D70}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EBFBC20E-F303-4D42-AD92-546709D02D70}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

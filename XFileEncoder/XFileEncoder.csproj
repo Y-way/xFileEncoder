@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -18,5 +18,9 @@
     <Prefer32Bit>True</Prefer32Bit>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\XEncrypt\XEncrypt.csproj" />
+  </ItemGroup>
 
 </Project>
