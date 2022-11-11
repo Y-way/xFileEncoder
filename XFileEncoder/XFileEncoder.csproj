@@ -20,6 +20,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\XDecrypt\XDecrypt.csproj" />
     <ProjectReference Include="..\XEncrypt\XEncrypt.csproj" />
   </ItemGroup>
 

@@ -7,10 +7,17 @@ using System.Text;
 
 namespace XFileEncode
 {
+    public enum XEncodeType
+    {
+        None,
+        GZip,
+    }
 
     [Serializable]
     public struct XEncryptFile
     {
+        public static readonly uint kSignature = System.BitConverter.ToUInt32(new byte[4] { (byte)'@', (byte)'X', (byte)'F', (byte)'E' }, 0);
+
         public readonly uint sign;// Signature code('@XFE')
         public readonly byte offset;// Rawdata offset form the file begin.
         public readonly uint reserved; //Reserved for users. 
@@ -20,9 +27,9 @@ namespace XFileEncode
         private byte encrypt_data_size; // Encrypt the length of data.
         private uint length; // The data length.
         
-        public XEncryptFile(uint sign, byte encryptSize, byte encodeType, uint reserved = 0)
+        public XEncryptFile(byte encryptSize, byte encodeType, uint reserved = 0)
         {
-            this.sign = sign;
+            this.sign = XEncryptFile.kSignature;
             this.offset = sizeof(uint) * 4;
             this.encrypt_data_size = encryptSize;
             this.encode_type = encodeType;
@@ -30,7 +37,7 @@ namespace XFileEncode
             this.length = 0;
             this.reserved = reserved;
         }
-
+        #region 加密
         public static bool EncryptData(XEncryptFile header, byte[] bytes, Stream stream)
         {
             if(stream == null)
@@ -46,7 +53,7 @@ namespace XFileEncode
             }
 
             byte[] encodeData = bytes;
-            if(header.encode_type == 1)
+            if(header.encode_type == (byte)XEncodeType.GZip)
             {
                 if(!GZipCompress(bytes, out encodeData))
                 {
@@ -129,12 +136,7 @@ namespace XFileEncode
             }
             return true;
         }
+        #endregion
 
-        public static uint SignatureCode()
-        {
-            byte[] bpara = new byte[4] { (byte)'@', (byte)'X', (byte)'F', (byte)'E' };
-            uint upara = System.BitConverter.ToUInt32(bpara, 0);
-            return upara;
-        }
     };
 }

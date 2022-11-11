@@ -2,13 +2,14 @@ using System;
 using System.IO;
 using System.IO.Compression;
 using System.Reflection.Emit;
+using System.Xml.Linq;
 using static System.Net.WebRequestMethods;
 
 namespace XFileEncode
 {
-    public class Gerneral
+    public class XEncryptGerneral
     {
-        public Gerneral()
+        public XEncryptGerneral()
         {
         }
 
@@ -88,7 +89,7 @@ namespace XFileEncode
                 using(BinaryReader br = new System.IO.BinaryReader(fs))
                 {
                     uint data = br.ReadUInt32();
-                    return XEncryptFile.SignatureCode() == data;
+                    return XEncryptFile.kSignature == data;
                 }
             }
         }
@@ -116,9 +117,12 @@ namespace XFileEncode
             try
             {
                 string path = Path.GetDirectoryName(xFileName);
-                if(!Directory.Exists(path))
+                if(!string.IsNullOrWhiteSpace(path))
                 {
-                    Directory.CreateDirectory(path);
+                    if(!Directory.Exists(path))
+                    {
+                        Directory.CreateDirectory(path);
+                    }
                 }
             }
             catch(Exception ex)
@@ -126,7 +130,7 @@ namespace XFileEncode
                 Console.WriteLine(ex.Message);
                 return;
             }
-            
+
             ///Encode the source file.
             using(FileStream sourceStream = new FileStream(source, FileMode.Open))
             {
@@ -136,15 +140,10 @@ namespace XFileEncode
                     byte[] data = new byte[lSize];
                     sourceStream.Read(data, 0, (int)lSize);
                     sourceStream.Close();
-                    XEncryptFile _xHeader = new XEncryptFile(
-                        sign: XEncryptFile.SignatureCode(),
-                        encryptSize: encryptSize,
-                        encodeType: encodeType,
-                        reserved: 0);
-
                     
                     using(FileStream sw = new FileStream(xFileName, FileMode.Create))
                     {
+                        XEncryptFile _xHeader = new XEncryptFile(encryptSize: encryptSize, encodeType: encodeType, reserved: 0);
                         if(!XEncryptFile.EncryptData(_xHeader, data, sw))
                         {
                             return;
@@ -157,7 +156,6 @@ namespace XFileEncode
                     Console.WriteLine(ex.Message);
                 }
             }
-
         }
     }
 }
