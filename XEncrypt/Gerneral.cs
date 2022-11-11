@@ -108,7 +108,7 @@ namespace XFileEncode
                 return;
             }
 
-            if(xFileName.EndsWith('/') || xFileName.EndsWith('\\'))
+            if(xFileName.EndsWith("/") || xFileName.EndsWith("\\"))
             {
                 Console.WriteLine($"输出文件无效:{xFileName}");
                 return;
