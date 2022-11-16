@@ -4,6 +4,7 @@ using System.IO.Compression;
 using System.IO;
 using System.Reflection.Emit;
 using System.Text;
+using XEncryptNative;
 
 namespace XFileEncode
 {
@@ -51,7 +52,23 @@ namespace XFileEncode
                 Console.WriteLine("加密数据为空");
                 return false;
             }
-
+            using(XEncryptService.EncryptScope scope = new XEncryptService.EncryptScope())
+            {
+                byte[] encodeData;
+                scope.Begin();
+                ResultCode code = scope.EncryptData(bytes, out encodeData, header.encrypt_data_size, (XEncryptNative.XEncodeType)header.encode_type);
+                scope.End();
+                if(code == ResultCode.Ok)
+                {
+                    using(BinaryWriter bw = new BinaryWriter(stream))
+                    {
+                        bw.Write(encodeData, 0, encodeData.Length);
+                        bw.Flush();
+                    }
+                }
+                return code == ResultCode.Ok;
+            }
+#if false
             byte[] encodeData = bytes;
             if(header.encode_type == (byte)XEncodeType.GZip)
             {
@@ -88,6 +105,7 @@ namespace XFileEncode
                 bw.Flush();
             }
             return true;
+#endif
         }
 
         static bool GZipCompress(byte[] input, out byte[] output)

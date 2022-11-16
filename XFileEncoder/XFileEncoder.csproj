@@ -5,23 +5,27 @@
     <StartupObject>XFileEncode.Program</StartupObject>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
     <SignAssembly>False</SignAssembly>
-    <IsPublishable>True</IsPublishable>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <IsPublishable>False</IsPublishable>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <Nullable>disable</Nullable>
+    <BaseOutputPath>E:\Work\Tools\tool\XFileEncoder\x64\</BaseOutputPath>
+    <ProduceReferenceAssembly>True</ProduceReferenceAssembly>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <Prefer32Bit>True</Prefer32Bit>
-    <WarningLevel>4</WarningLevel>
+    <WarningLevel>3</WarningLevel>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <Prefer32Bit>True</Prefer32Bit>
-    <WarningLevel>4</WarningLevel>
+    <WarningLevel>3</WarningLevel>
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\XDecrypt\XDecrypt.csproj" />
-    <ProjectReference Include="..\XEncrypt\XEncrypt.csproj" />
+    <ProjectReference Include="..\XEncryptApi\XEncryptApi.vcxproj" />
   </ItemGroup>
 
 </Project>

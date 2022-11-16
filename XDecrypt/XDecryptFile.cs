@@ -2,6 +2,8 @@ using System;
 using System.IO.Compression;
 using System.IO;
 using System.Text;
+using XEncryptNative;
+using System.Runtime.InteropServices;
 
 namespace XDecrypt
 {
@@ -16,12 +18,23 @@ namespace XDecrypt
         #region 解密
         public static bool DecryptData(Stream stream, out byte[] bytes)
         {
-            bytes = default;
+            bytes = null;
             if(stream == null)
             {
                 Console.WriteLine("输出流为空");
                 return false;
             }
+            byte[] rawdata = new byte[stream.Length];
+            stream.Read(rawdata, 0, rawdata.Length);
+
+            using(XEncryptService.DecryptScope scope = new XEncryptService.DecryptScope())
+            {
+                scope.Begin();
+                ResultCode code = scope.DecryptData(rawdata, out bytes);
+                scope.End();
+                return code == ResultCode.Ok;
+            }
+#if false
             long position = stream.Position;
             using(BinaryReader reader = new BinaryReader(stream))
             {
@@ -63,6 +76,7 @@ namespace XDecrypt
                 }
             }
             return true;
+#endif
         }
         /// <summary>
         /// 数据解密处理
@@ -117,7 +131,7 @@ namespace XDecrypt
                     }
                     output = outBuffer.ToArray();
                 }
-                
+
             }
             return true;
         }

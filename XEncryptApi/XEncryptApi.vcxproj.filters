@@ -1,0 +1,201 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="资源文件">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="encrypt">
+      <UniqueIdentifier>{6320e5c7-fc7b-4e4a-be19-9304103ff1f3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="encrypt\common">
+      <UniqueIdentifier>{9f79d390-f8b4-41f0-aa51-6b4eac822658}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="encrypt\zlib">
+      <UniqueIdentifier>{de5bea3a-ee75-4840-bb9a-c70f748f18ac}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="encrypt\xxHash">
+      <UniqueIdentifier>{a361ddaf-29b4-43ec-9e01-2cf90dec6017}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="encrypt\common\Allocator.h">
+      <Filter>encrypt\common</Filter>
+    </ClInclude>
+    <ClInclude Include="encrypt\common\Common.h">
+      <Filter>encrypt\common</Filter>
+    </ClInclude>
+    <ClInclude Include="encrypt\common\Logging.h">
+      <Filter>encrypt\common</Filter>
+    </ClInclude>
+    <ClInclude Include="encrypt\common\XAssert.h">
+      <Filter>encrypt\common</Filter>
+    </ClInclude>
+    <ClInclude Include="encrypt\common\ZipUtils.h">
+      <Filter>encrypt\common</Filter>
+    </ClInclude>
+    <ClInclude Include="encrypt\xxHash\xxh3.h">
+      <Filter>encrypt\xxHash</Filter>
+    </ClInclude>
+    <ClInclude Include="encrypt\xxHash\xxhash.h">
+      <Filter>encrypt\xxHash</Filter>
+    </ClInclude>
+    <ClInclude Include="encrypt\zlib\crc32.h">
+      <Filter>encrypt\zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="encrypt\zlib\deflate.h">
+      <Filter>encrypt\zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="encrypt\zlib\gzguts.h">
+      <Filter>encrypt\zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="encrypt\zlib\inffast.h">
+      <Filter>encrypt\zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="encrypt\zlib\inffixed.h">
+      <Filter>encrypt\zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="encrypt\zlib\inflate.h">
+      <Filter>encrypt\zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="encrypt\zlib\inftrees.h">
+      <Filter>encrypt\zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="encrypt\zlib\trees.h">
+      <Filter>encrypt\zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="encrypt\zlib\zconf.h">
+      <Filter>encrypt\zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="encrypt\zlib\zlib.h">
+      <Filter>encrypt\zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="encrypt\zlib\zutil.h">
+      <Filter>encrypt\zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="encrypt\api_types.h">
+      <Filter>encrypt</Filter>
+    </ClInclude>
+    <ClInclude Include="encrypt\config.h">
+      <Filter>encrypt</Filter>
+    </ClInclude>
+    <ClInclude Include="encrypt\config_api.h">
+      <Filter>encrypt</Filter>
+    </ClInclude>
+    <ClInclude Include="encrypt\config_api_platforms.h">
+      <Filter>encrypt</Filter>
+    </ClInclude>
+    <ClInclude Include="encrypt\config_platforms.h">
+      <Filter>encrypt</Filter>
+    </ClInclude>
+    <ClInclude Include="encrypt\Decoder.h">
+      <Filter>encrypt</Filter>
+    </ClInclude>
+    <ClInclude Include="encrypt\Encoder.h">
+      <Filter>encrypt</Filter>
+    </ClInclude>
+    <ClInclude Include="encrypt\RuntimeApi.h">
+      <Filter>encrypt</Filter>
+    </ClInclude>
+    <ClInclude Include="encrypt\XContext.h">
+      <Filter>encrypt</Filter>
+    </ClInclude>
+    <ClInclude Include="encrypt\XEFDecoder.h">
+      <Filter>encrypt</Filter>
+    </ClInclude>
+    <ClInclude Include="encrypt\XEFEncoder.h">
+      <Filter>encrypt</Filter>
+    </ClInclude>
+    <ClInclude Include="encrypt\XService.h">
+      <Filter>encrypt</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="encrypt\common\Allocator.cpp">
+      <Filter>encrypt\common</Filter>
+    </ClCompile>
+    <ClCompile Include="encrypt\common\Logging.cpp">
+      <Filter>encrypt\common</Filter>
+    </ClCompile>
+    <ClCompile Include="encrypt\common\XAssert.cpp">
+      <Filter>encrypt\common</Filter>
+    </ClCompile>
+    <ClCompile Include="encrypt\common\ZipUtils.cpp">
+      <Filter>encrypt\common</Filter>
+    </ClCompile>
+    <ClCompile Include="encrypt\xxHash\xxhash.c">
+      <Filter>encrypt\xxHash</Filter>
+    </ClCompile>
+    <ClCompile Include="encrypt\zlib\adler32.c">
+      <Filter>encrypt\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="encrypt\zlib\compress.c">
+      <Filter>encrypt\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="encrypt\zlib\crc32.c">
+      <Filter>encrypt\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="encrypt\zlib\deflate.c">
+      <Filter>encrypt\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="encrypt\zlib\gzclose.c">
+      <Filter>encrypt\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="encrypt\zlib\gzlib.c">
+      <Filter>encrypt\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="encrypt\zlib\gzread.c">
+      <Filter>encrypt\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="encrypt\zlib\gzwrite.c">
+      <Filter>encrypt\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="encrypt\zlib\infback.c">
+      <Filter>encrypt\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="encrypt\zlib\inffast.c">
+      <Filter>encrypt\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="encrypt\zlib\inflate.c">
+      <Filter>encrypt\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="encrypt\zlib\inftrees.c">
+      <Filter>encrypt\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="encrypt\zlib\trees.c">
+      <Filter>encrypt\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="encrypt\zlib\uncompr.c">
+      <Filter>encrypt\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="encrypt\zlib\zutil.c">
+      <Filter>encrypt\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="encrypt\RuntimeApi.cpp">
+      <Filter>encrypt</Filter>
+    </ClCompile>
+    <ClCompile Include="encrypt\XContext.cpp">
+      <Filter>encrypt</Filter>
+    </ClCompile>
+    <ClCompile Include="encrypt\XEFDecoder.cpp">
+      <Filter>encrypt</Filter>
+    </ClCompile>
+    <ClCompile Include="encrypt\XEFEncoder.cpp">
+      <Filter>encrypt</Filter>
+    </ClCompile>
+    <ClCompile Include="encrypt\XService.cpp">
+      <Filter>encrypt</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="encrypt\xxHash\README.md">
+      <Filter>encrypt\xxHash</Filter>
+    </None>
+    <None Include="encrypt\zlib\README">
+      <Filter>encrypt\zlib</Filter>
+    </None>
+    <None Include="encrypt\zlib\zlib.map">
+      <Filter>encrypt\zlib</Filter>
+    </None>
+  </ItemGroup>
+</Project>

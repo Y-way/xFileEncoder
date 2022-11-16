@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "XFileEncoder": {
+      "commandName": "Project",
+      "commandLineArgs": "decrypt -load App.Fight.xef.bytes -out App.Fight.xdf.bytes",
+      "workingDirectory": "E:\\Work\\Tools\\tool\\XFileEncoder\\x64",
+      "nativeDebugging": true
+    }
+  }
+}

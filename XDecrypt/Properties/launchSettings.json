@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "XDecrypt": {
+      "commandName": "Project",
+      "nativeDebugging": true
+    }
+  }
+}
