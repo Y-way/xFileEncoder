@@ -4,7 +4,7 @@ using System.IO.Compression;
 using System.IO;
 using System.Reflection.Emit;
 using System.Text;
-using XEncryptNative;
+using XEncryptApi;
 
 namespace XFileEncode
 {
@@ -56,7 +56,7 @@ namespace XFileEncode
             {
                 byte[] encodeData;
                 scope.Begin();
-                ResultCode code = scope.EncryptData(bytes, out encodeData, header.encrypt_data_size, (XEncryptNative.XEncodeType)header.encode_type);
+                ResultCode code = scope.EncryptData(bytes, out encodeData, header.encrypt_data_size, (XEncryptApi.XEncodeType)header.encode_type);
                 scope.End();
                 if(code == ResultCode.Ok)
                 {

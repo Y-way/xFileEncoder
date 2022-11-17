@@ -2,7 +2,7 @@ using System;
 using System.IO.Compression;
 using System.IO;
 using System.Text;
-using XEncryptNative;
+using XEncryptApi;
 using System.Runtime.InteropServices;
 
 namespace XDecrypt

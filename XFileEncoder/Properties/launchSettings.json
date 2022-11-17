@@ -2,7 +2,7 @@
   "profiles": {
     "XFileEncoder": {
       "commandName": "Project",
-      "commandLineArgs": "decrypt -load App.Fight.xef.bytes -out App.Fight.xdf.bytes",
+      "commandLineArgs": "encrypt -load global-metadata.dat -out global-metadata.xef -encode-type zip",
       "workingDirectory": "E:\\Work\\Tools\\tool\\XFileEncoder\\x64",
       "nativeDebugging": true
     }

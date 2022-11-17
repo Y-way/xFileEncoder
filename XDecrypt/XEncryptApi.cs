@@ -1,6 +1,6 @@
 using System;
 using System.Runtime.InteropServices;
-namespace XEncryptNative
+namespace XEncryptApi
 {
     public enum ResultCode
     {
@@ -68,8 +68,8 @@ namespace XEncryptNative
                         Console.WriteLine($"Decrypt data state({resultCode})");
                         if(resultCode == ResultCode.Ok)
                         {
-                            rawdata = new byte[decodeSize];
-                            Marshal.Copy(decodeData, rawdata, 0, (int)decodeSize);
+                            data = new byte[decodeSize];
+                            Marshal.Copy(decodeData, data, 0, (int)decodeSize);
                         }
                         return resultCode;
                     }

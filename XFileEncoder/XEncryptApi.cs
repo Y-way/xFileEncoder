@@ -1,6 +1,6 @@
 using System;
 using System.Runtime.InteropServices;
-namespace XEncryptNative
+namespace XEncryptApi
 {
     public enum ResultCode
     {
@@ -43,16 +43,19 @@ namespace XEncryptNative
             IntPtr _context;
             public DecryptScope()
             {
+                Console.WriteLine("DecryptScope service Initialize");
                 XEncryptService.Initialize();
             }
 
             public void Begin()
             {
+                Console.WriteLine("DecryptScope Begin");
                 _context = XEncryptService.CreateXContext(XContextType.Decrypt);
             }
 
             public ResultCode DecryptData(byte[] rawdata, out byte[] data)
             {
+                Console.WriteLine("DecryptScope DecryptData");
                 data = rawdata;
                 unsafe
                 {
@@ -78,6 +81,7 @@ namespace XEncryptNative
 
             public void End()
             {
+                Console.WriteLine("DecryptScope End");
                 if(_context != null)
                 {
                     XEncryptService.ReleaseXContext(_context);
@@ -86,6 +90,7 @@ namespace XEncryptNative
 
             public void Dispose()
             {
+                Console.WriteLine("DecryptScope service UnInitialize");
                 XEncryptService.Denitialize();
             }
         }
@@ -95,29 +100,35 @@ namespace XEncryptNative
             IntPtr _context;
             public EncryptScope()
             {
+                Console.WriteLine("EncryptScope service Initialize");
                 XEncryptService.Initialize();
             }
 
             public void Begin()
             {
+                Console.WriteLine("EncryptScope Begin");
                 _context = XEncryptService.CreateXContext(XContextType.Ecrypt);
             }
 
             public ResultCode EncryptData(byte[] rawdata, out byte[] data, byte encryptSize = 16, XEncodeType type = XEncodeType.XNone)
             {
+                Console.WriteLine("EncryptScope EncryptData");
                 data = rawdata;
                 unsafe
                 {
                     fixed(byte* rawdataPtr = rawdata)
                     {
+                        //Console.WriteLine($"{rawdata}:${rawdata.LongLength}");
+                        //Console.WriteLine($"source data:{rawdataPtr}");
                         if(XEncryptService.IsEncrypted(rawdataPtr, rawdata.LongLength))
                         {
+                            Console.WriteLine("EncryptScope EncryptedData");
                             return ResultCode.EncryptedData;
                         }
                         IntPtr encodeData = IntPtr.Zero;
                         ulong decodeSize = 0;
                         ResultCode resultCode = XEncryptService.Encrypt(_context, rawdataPtr, rawdata.LongLength, out encodeData, out decodeSize, encryptSize, type);
-                        Console.WriteLine($"Decrypt data state({resultCode})");
+                        Console.WriteLine($"Encrypt data state({resultCode})");
                         if(resultCode == ResultCode.Ok)
                         {
                             data = new byte[decodeSize];
@@ -130,6 +141,7 @@ namespace XEncryptNative
 
             public void End()
             {
+                Console.WriteLine("EncryptScope End");
                 if(_context != null)
                 {
                     XEncryptService.ReleaseXContext(_context);
@@ -138,6 +150,7 @@ namespace XEncryptNative
 
             public void Dispose()
             {
+                Console.WriteLine("EncryptScope service UnInitialize");
                 XEncryptService.Denitialize();
             }
         }

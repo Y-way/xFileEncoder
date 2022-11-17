@@ -1,6 +1,6 @@
 using System;
 using System.IO;
-using XEncryptNative;
+using XEncryptApi;
 
 namespace XFileEncode
 {
@@ -12,7 +12,7 @@ namespace XFileEncode
         private static byte _encodeType;
         private static int _cmd;
 
-        //commandLineArgs:"encrypt -load App.Fight.dll.bytes -out App.Fight.xef.bytes -encode_type zip",
+        //commandLineArgs:"encrypt -load App.Fight.dll.bytes -out App.Fight.xef.bytes -encrypt-size 16 -encode-type zip",
         //commandLineArgs:"decrypt -load App.Fight.xef.bytes -out App.Fight.xdf.bytes"
         static void Main(string[] args)
         {
@@ -29,28 +29,37 @@ namespace XFileEncode
             }
             if(ParseParameter(args))
             {
-                if(_cmd == 0)
+                try
                 {
-                    Encrypt(_xFile, _outFile, _encryptSize, (XEncodeType)_encodeType);
+                    if(_cmd == 0)
+                    {
+                        Encrypt(_xFile, _outFile, _encryptSize, (XEncodeType)_encodeType);
+                    }
+                    else if(_cmd == 1)
+                    {
+                        Decrypt(_xFile, _outFile);
+                    }
                 }
-                else if(_cmd == 1)
+                catch(Exception ex)
                 {
-                    Decrypt(_xFile, _outFile);
+                    Console.WriteLine(ex.Message);
                 }
+                
             }
         }
 
         static void PrintUsage()
         {
             Console.WriteLine("Usage:");
-            Console.WriteLine("XFileEncoder encrypt|decrypt -load FileName [-out OutputFileName] [-encrypt_size size] [-encode_type type]");
+            Console.WriteLine("XFileEncoder encrypt|decrypt -load FileName [-out OutputFileName] [-encrypt-size size] [-encode-type type]");
             Console.WriteLine("\tencrypt|decrypt:加密/解密文件,必须参数");
             Console.WriteLine("\t\t-load:加载欲加密文件,必须参数");
             Console.WriteLine("\t\t-out:输出文件名字.可选参数,默认文件名out.xfe");
-            Console.WriteLine("\t\t-encrypt_size:加密数据长度,可选参数,默认16字节. 取值范围:Min(Clamp(encrypt_size, 16, 256), file_size)");
-            Console.WriteLine("\t\t-encode_type:加密源数据方式,可选参数.none:不改变源文件内容, 默认;zip:zip压缩源文件内容");
+            Console.WriteLine("\t\t-encrypt-size:加密数据长度,可选参数,默认16字节. 取值范围:Min(Clamp(encrypt-size, 16, 256), file_size)");
+            Console.WriteLine("\t\t-encode-type:加密源数据方式,可选参数.none:不改变源文件内容, 默认;zip:zip压缩源文件内容");
             Console.WriteLine("\t-help:查看帮助");
-            Console.WriteLine("例子:\nXFileEncoder -load test.png -out test.png -encrypt_size 32 -encode_type zip");
+            Console.WriteLine("例:\n加密:\n\tXFileEncoder encrypt -load test.png -out test.png -encrypt-size 32 -encode-type zip");
+            Console.WriteLine("解密:\n\tXFileEncoder edcrypt -load test.png -out test.png");
         }
 
         static bool ParseParameter(string[] args)
@@ -121,7 +130,7 @@ namespace XFileEncode
                     }
                 }
 
-                if (args[i] == "-encrypt_size")
+                if (args[i] == "-encrypt-size")
                 {
                     _encryptSize = 16;
                     
@@ -148,7 +157,7 @@ namespace XFileEncode
                         _encryptSize = 16;
                     }
                 }
-                if (args[i] == "-encode_type")
+                if (args[i] == "-encode-type")
                 {
                     _encodeType = 0;
                     if(i + 1 >= args.Length)
@@ -295,6 +304,7 @@ namespace XFileEncode
                 scope.Begin();
                 ResultCode code = scope.DecryptData(rawdata, out bytes);
                 scope.End();
+                Console.WriteLine($"State:{code}");
                 return code == ResultCode.Ok;
             }
         }
@@ -339,7 +349,7 @@ namespace XFileEncode
             }
 
             ///Encode the source file.
-            using(FileStream sourceStream = new FileStream(source, FileMode.Open))
+            using(FileStream sourceStream = File.Open(source, FileMode.Open))
             {
                 try
                 {
@@ -347,11 +357,11 @@ namespace XFileEncode
                     byte[] data = new byte[lSize];
                     sourceStream.Read(data, 0, (int)lSize);
                     sourceStream.Close();
-
                     using(FileStream sw = new FileStream(xFileName, FileMode.Create))
                     {
                         if(!EncryptData(data, sw, encryptSize, encodeType))
                         {
+                            Console.WriteLine("失败!" + xFileName);
                             return;
                         }
                         Console.WriteLine("输出成功!" + xFileName);
@@ -372,7 +382,7 @@ namespace XFileEncode
                 return false;
             }
 
-            if(bytes == null)
+            if(bytes == null || bytes.Length <= 0)
             {
                 Console.WriteLine("加密数据为空");
                 return false;
@@ -383,6 +393,7 @@ namespace XFileEncode
                 scope.Begin();
                 ResultCode code = scope.EncryptData(bytes, out encodeData, encryptSize, encodeType);
                 scope.End();
+                Console.WriteLine($"State:{code}");
                 if(code == ResultCode.Ok)
                 {
                     using(BinaryWriter bw = new BinaryWriter(stream))
