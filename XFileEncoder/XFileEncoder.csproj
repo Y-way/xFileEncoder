@@ -6,9 +6,10 @@
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
     <SignAssembly>False</SignAssembly>
     <IsPublishable>True</IsPublishable>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>netstandard2.1</TargetFramework>
     <BaseOutputPath>E:\Work\Tools\tool\XFileEncoder\x64</BaseOutputPath>
     <NoWin32Manifest>true</NoWin32Manifest>
+    <Nullable>disable</Nullable>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
