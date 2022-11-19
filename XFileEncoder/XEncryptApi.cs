@@ -2,60 +2,135 @@ using System;
 using System.Runtime.InteropServices;
 namespace XEncryptApi
 {
+    /// <summary>
+    /// 加密/解密结果状态码
+    /// </summary>
     public enum ResultCode
     {
+        /// <summary>
+        /// 正常
+        /// </summary>
         Ok,
+        /// <summary>
+        /// 未知错误
+        /// </summary>
         Unknown,
+        /// <summary>
+        /// 加密/解密服务未初始化
+        /// </summary>
         UnInitialize,
+        /// <summary>
+        /// 无效的输入数据
+        /// </summary>
         InvalidInputData,
+        /// <summary>
+        /// 输入数据长度不正确
+        /// </summary>
         InvalidInputDataSize,
+        /// <summary>
+        /// 无效的解密器
+        /// </summary>
         InvalidDecoder,
+        /// <summary>
+        /// 加密文件不是GZip压缩
+        /// </summary>
         InvalidUnzip,
+        /// <summary>
+        /// 无效的加密器
+        /// </summary>
         InvalidEncoder,
+        /// <summary>
+        /// 文件加密GZip压缩失败
+        /// </summary>
         InvalidZip,
+        /// <summary>
+        /// 文件已加密
+        /// </summary>
         EncryptedData,
+        /// <summary>
+        /// 内存不足
+        /// </summary>
         OutMemory,
+        /// <summary>
+        /// 加密/解密上下文类型不匹配
+        /// </summary>
         ContextTypeError,
+        /// <summary>
+        /// 不支持解密服务
+        /// </summary>
         NotSupportDecrypt,
+        /// <summary>
+        /// 不支持加密服务
+        /// </summary>
         NotSupportEncrypt,
     };
-
+    /// <summary>
+    /// 加密/解密服务器上下文类型
+    /// </summary>
     public enum XContextType
     {
+        /// <summary>
+        /// 未知
+        /// </summary>
         XUnknown,
+        /// <summary>
+        /// 加密服务上下文
+        /// </summary>
         Ecrypt,
+        /// <summary>
+        /// 解密服务上下文
+        /// </summary>
         Decrypt,
     };
-
+    /// <summary>
+    /// 明文加密类型
+    /// </summary>
     public enum XEncodeType
     {
+        /// <summary>
+        /// 源文件不作处理,只增加加密文件头部
+        /// </summary>
         XNone,
-        XZip,
+        /// <summary>
+        /// 源文件GZip压缩
+        /// </summary>
+        XGZip,
     };
 
     public static class XEncryptService
     {
         private const string dllName = "XEncrypt.dll";
-
+        /// <summary>
+        /// 加密文件标记
+        /// </summary>
         public static readonly uint kSignature = System.BitConverter.ToUInt32(new byte[4] { (byte)'@', (byte)'X', (byte)'F', (byte)'E' }, 0);
+
+
+        public static void DebugLog(string format, params object[] args)
+        {
+            Console.WriteLine(format, args);
+        }
+        /// <summary>
+        /// 解密Scope
+        /// </summary>
         public class DecryptScope : IDisposable
         {
             IntPtr _context;
             public DecryptScope()
             {
-                Console.WriteLine("DecryptScope service Initialize");
+                DebugLog("DecryptScope Initialize");
                 XEncryptService.Initialize();
             }
 
             public void Begin()
             {
-                Console.WriteLine("DecryptScope Begin");
+                DebugLog("DecryptScope Begin");
                 _context = XEncryptService.CreateXContext(XContextType.Decrypt);
             }
 
             public ResultCode DecryptData(byte[] rawdata, out byte[] data)
             {
-                Console.WriteLine("DecryptScope DecryptData");
+                DebugLog("DecryptScope DecryptData");
                 data = rawdata;
                 unsafe
                 {
@@ -68,7 +143,7 @@ namespace XEncryptApi
                         IntPtr decodeData = IntPtr.Zero;
                         long decodeSize = 0;
                         ResultCode resultCode = XEncryptService.Decrypt(_context, rawdataPtr, rawdata.LongLength, out decodeData, out decodeSize);
-                        Console.WriteLine($"Decrypt data state({resultCode})");
+                        DebugLog($"Decrypt data state({resultCode})");
                         if(resultCode == ResultCode.Ok)
                         {
                             data = new byte[decodeSize];
@@ -81,7 +156,7 @@ namespace XEncryptApi
 
             public void End()
             {
-                Console.WriteLine("DecryptScope End");
+                DebugLog("DecryptScope End");
                 if(_context != null)
                 {
                     XEncryptService.ReleaseXContext(_context);
@@ -90,45 +165,44 @@ namespace XEncryptApi
 
             public void Dispose()
             {
-                Console.WriteLine("DecryptScope service UnInitialize");
-                XEncryptService.Denitialize();
+                DebugLog("DecryptScope UnInitialize");
+                XEncryptService.Deinitialize();
             }
         }
-
+        /// <summary>
+        /// 加密Scope
+        /// </summary>
         public class EncryptScope : IDisposable
         {
             IntPtr _context;
             public EncryptScope()
             {
-                Console.WriteLine("EncryptScope service Initialize");
+                DebugLog("EncryptScope Initialize");
                 XEncryptService.Initialize();
             }
 
             public void Begin()
             {
-                Console.WriteLine("EncryptScope Begin");
+                DebugLog("EncryptScope Begin");
                 _context = XEncryptService.CreateXContext(XContextType.Ecrypt);
             }
 
             public ResultCode EncryptData(byte[] rawdata, out byte[] data, byte encryptSize = 16, XEncodeType type = XEncodeType.XNone)
             {
-                Console.WriteLine("EncryptScope EncryptData");
+                DebugLog("EncryptScope EncryptData");
                 data = rawdata;
                 unsafe
                 {
                     fixed(byte* rawdataPtr = rawdata)
                     {
-                        //Console.WriteLine($"{rawdata}:${rawdata.LongLength}");
-                        //Console.WriteLine($"source data:{rawdataPtr}");
                         if(XEncryptService.IsEncrypted(rawdataPtr, rawdata.LongLength))
                         {
-                            Console.WriteLine("EncryptScope EncryptedData");
                             return ResultCode.EncryptedData;
                         }
                         IntPtr encodeData = IntPtr.Zero;
                         ulong decodeSize = 0;
                         ResultCode resultCode = XEncryptService.Encrypt(_context, rawdataPtr, rawdata.LongLength, out encodeData, out decodeSize, encryptSize, type);
-                        Console.WriteLine($"Encrypt data state({resultCode})");
+                        DebugLog($"Encrypt data state({resultCode})");
                         if(resultCode == ResultCode.Ok)
                         {
                             data = new byte[decodeSize];
@@ -141,7 +215,7 @@ namespace XEncryptApi
 
             public void End()
             {
-                Console.WriteLine("EncryptScope End");
+                DebugLog("EncryptScope End");
                 if(_context != null)
                 {
                     XEncryptService.ReleaseXContext(_context);
@@ -150,8 +224,8 @@ namespace XEncryptApi
 
             public void Dispose()
             {
-                Console.WriteLine("EncryptScope service UnInitialize");
-                XEncryptService.Denitialize();
+                DebugLog("EncryptScope UnInitialize");
+                XEncryptService.Deinitialize();
             }
         }
 
@@ -165,7 +239,7 @@ namespace XEncryptApi
         /// 解密服务反初始化
         /// </summary>
         [DllImport(dllName, EntryPoint = "decrypt_service_deinitialize", CallingConvention = CallingConvention.Cdecl)]
-        public static extern void Denitialize();
+        public static extern void Deinitialize();
 
         /// <summary>
         /// 数据是否加密
@@ -192,7 +266,7 @@ namespace XEncryptApi
         /// <param name="dataSize"></param>
         /// <returns></returns>
         [DllImport(dllName, EntryPoint = "decrypt_service_encrypt", CallingConvention = CallingConvention.Cdecl)]
-        public static extern unsafe ResultCode Encrypt(IntPtr context, byte* input, long inputSize, out IntPtr data, out ulong dataSize, byte encryptSize = 16, XEncodeType type = XEncodeType.XZip);
+        public static extern unsafe ResultCode Encrypt(IntPtr context, byte* input, long inputSize, out IntPtr data, out ulong dataSize, byte encryptSize = 16, XEncodeType type = XEncodeType.XGZip);
 
         /// <summary>
         /// 解密数据
