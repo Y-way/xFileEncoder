@@ -109,7 +109,7 @@ namespace encrypt
         /// <summary>
         /// 源数据重新GZip压缩编码
         /// </summary>
-        XZip,
+        XGZip,
     };
 
     //Add By Y-way
