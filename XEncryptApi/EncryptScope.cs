@@ -46,14 +46,14 @@ namespace XEncryptAPI
 #if DEBUG
                     DebugLog($"Encrypt data state({result.code})");
 #endif
-                    if((ResultCode)result.code == ResultCode.Ok)
+                    if(result.code == ResultCode.Ok)
                     {
                         data = new byte[result.size];
 
                         Marshal.Copy(result.data, data, 0, (int)result.size);
                     }
                     XService.ReleaseResult(_service, ref result);
-                    return (ResultCode)result.code;
+                    return result.code;
                 }
             }
         }
