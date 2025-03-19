@@ -1,6 +1,6 @@
 using System;
 using System.IO;
-using XEncryptApi;
+using XEncryptAPI;
 
 namespace XFileEncode
 {
@@ -38,32 +38,32 @@ namespace XFileEncode
                 {
                     Console.WriteLine(ex.Message);
                 }
-                
+
             }
         }
 
         static void PrintUsage()
         {
-            XEncryptService.DebugLog("Usage:");
-            XEncryptService.DebugLog("XFileEncoder encrypt|decrypt -load FileName [-out OutputFileName] [-encrypt-size size] [-encode-type type]");
-            XEncryptService.DebugLog("\tencrypt|decrypt:加密/解密文件,必须参数");
-            XEncryptService.DebugLog("\t\t-load:加载欲加密文件,必须参数");
-            XEncryptService.DebugLog("\t\t-out:输出文件名字.可选参数,默认文件名out.xfe");
-            XEncryptService.DebugLog("\t\t-encrypt-size:加密数据长度,可选参数,默认16字节. 取值范围:Min(Clamp(encrypt-size, 16, 256), file_size)");
-            XEncryptService.DebugLog("\t\t-encode-type:加密源数据方式,可选参数.none:不改变源文件内容, 默认;zip:zip压缩源文件内容");
-            XEncryptService.DebugLog("\t-help:查看帮助");
-            XEncryptService.DebugLog("例:\n加密:\n\tXFileEncoder encrypt -load test.png -out test.png -encrypt-size 32 -encode-type zip");
-            XEncryptService.DebugLog("解密:\n\tXFileEncoder edcrypt -load test.png -out test.png");
+            XService.DebugLog("Usage:");
+            XService.DebugLog("XFileEncoder encrypt|decrypt -load FileName [-out OutputFileName] [-encrypt-size size] [-encode-type type]");
+            XService.DebugLog("\tencrypt|decrypt:加密/解密文件,必须参数");
+            XService.DebugLog("\t\t-load:加载欲加密文件,必须参数");
+            XService.DebugLog("\t\t-out:输出文件名字.可选参数,默认文件名out.xfe");
+            XService.DebugLog("\t\t-encrypt-size:加密数据长度,可选参数,默认16字节. 取值范围:Min(Clamp(encrypt-size, 16, 256), file_size)");
+            XService.DebugLog("\t\t-encode-type:加密源数据方式,可选参数.none:不改变源文件内容, 默认;zip:zip压缩源文件内容");
+            XService.DebugLog("\t-help:查看帮助");
+            XService.DebugLog("例:\n加密:\n\tXFileEncoder encrypt -load test.png -out test.png -encrypt-size 32 -encode-type zip");
+            XService.DebugLog("解密:\n\tXFileEncoder edcrypt -load test.png -out test.png");
         }
 
         static bool ParseParameter(string[] args)
         {
-            bool result = false;
+            bool result = true;
             do
             {
                 if(args.Length < 1)
                 {
-                    XEncryptService.DebugLog("参数不对{0}", args.Length.ToString());
+                    XService.DebugLog("参数不对{0}", args.Length.ToString());
                     result = false;
                     break;
                 }
@@ -76,7 +76,7 @@ namespace XFileEncode
 
                 if(args.Length < 3)
                 {
-                    XEncryptService.DebugLog("参数错误{0}", args.Length.ToString());
+                    XService.DebugLog("参数错误{0}", args.Length.ToString());
                     result = false;
                     break;
                 }
@@ -111,7 +111,7 @@ namespace XFileEncode
                         }
                         else
                         {
-                            XEncryptService.DebugLog($"{args[i]} 参数值无效");
+                            XService.DebugLog($"{args[i]} 参数值无效");
                         }
                     }
 
@@ -129,7 +129,7 @@ namespace XFileEncode
                         }
                         else
                         {
-                            XEncryptService.DebugLog($"{args[i]} 参数值无效");
+                            XService.DebugLog($"{args[i]} 参数值无效");
                         }
                     }
 
@@ -152,7 +152,7 @@ namespace XFileEncode
                         }
                         else
                         {
-                            XEncryptService.DebugLog($"{args[i]} 参数值无效");
+                            XService.DebugLog($"{args[i]} 参数值无效");
                         }
 
                         if(_encryptSize < 16)
@@ -177,7 +177,7 @@ namespace XFileEncode
                         }
                         else
                         {
-                            XEncryptService.DebugLog($"{args[i]} 参数值无效");
+                            XService.DebugLog($"{args[i]} 参数值无效");
                         }
                     }
                 }
@@ -222,7 +222,7 @@ namespace XFileEncode
                 {
 
                     uint data = br.ReadUInt32();
-                    return XEncryptService.kSignature == data;
+                    return XService.kSignature == data;
                 }
             }
         }
@@ -237,19 +237,19 @@ namespace XFileEncode
             if(string.IsNullOrWhiteSpace(source) ||
                 string.IsNullOrWhiteSpace(xFileName))
             {
-                XEncryptService.DebugLog($"参数错误. 源文件:{source}=>输出文件:{xFileName}");
+                XService.DebugLog($"参数错误. 源文件:{source}=>输出文件:{xFileName}");
                 return;
             }
 
             if(!IsXEncryptFile(source))
             {
-                XEncryptService.DebugLog($"无效的文件:{source}");
+                XService.DebugLog($"无效的文件:{source}");
                 return;
             }
 
             if(xFileName.EndsWith("/") || xFileName.EndsWith("\\"))
             {
-                XEncryptService.DebugLog($"输出文件无效:{xFileName}");
+                XService.DebugLog($"输出文件无效:{xFileName}");
                 return;
             }
             try
@@ -265,7 +265,7 @@ namespace XFileEncode
             }
             catch(Exception ex)
             {
-                XEncryptService.DebugLog(ex.Message);
+                XService.DebugLog(ex.Message);
                 return;
             }
 
@@ -292,12 +292,12 @@ namespace XFileEncode
                             writer.Write(buffer);
                             writer.Flush();
                         }
-                        XEncryptService.DebugLog("输出成功!" + xFileName);
+                        XService.DebugLog("输出成功!" + xFileName);
                     }
                 }
                 catch(Exception ex)
                 {
-                    XEncryptService.DebugLog(ex.Message);
+                    XService.DebugLog(ex.Message);
                 }
             }
         }
@@ -312,18 +312,18 @@ namespace XFileEncode
             bytes = null;
             if(stream == null)
             {
-                XEncryptService.DebugLog("输出流为空");
+                XService.DebugLog("输出流为空");
                 return false;
             }
             byte[] rawdata = new byte[stream.Length];
             stream.Read(rawdata, 0, rawdata.Length);
 
-            using(XEncryptService.DecryptScope scope = new XEncryptService.DecryptScope())
+            using(DecryptScope scope = new DecryptScope((XEncodeType)_encodeType, _encryptSize))
             {
                 scope.Begin();
                 ResultCode code = scope.DecryptData(rawdata, out bytes);
                 scope.End();
-                XEncryptService.DebugLog($"State:{code}");
+                XService.DebugLog($"State:{code}");
                 return code == ResultCode.Ok;
             }
         }
@@ -342,19 +342,19 @@ namespace XFileEncode
             if(string.IsNullOrWhiteSpace(source)
                 || string.IsNullOrWhiteSpace(xFileName))
             {
-                XEncryptService.DebugLog($"参数错误. 源文件:{source}=>输出文件:{xFileName}");
+                XService.DebugLog($"参数错误. 源文件:{source}=>输出文件:{xFileName}");
                 return;
             }
 
             if(IsXEncryptFile(source))
             {
-                XEncryptService.DebugLog($"源文件已经加密:{source}");
+                XService.DebugLog($"源文件已经加密:{source}");
                 return;
             }
 
             if(xFileName.EndsWith("/") || xFileName.EndsWith("\\"))
             {
-                XEncryptService.DebugLog($"输出文件无效:{xFileName}");
+                XService.DebugLog($"输出文件无效:{xFileName}");
                 return;
             }
             try
@@ -370,7 +370,7 @@ namespace XFileEncode
             }
             catch(Exception ex)
             {
-                XEncryptService.DebugLog(ex.Message);
+                XService.DebugLog(ex.Message);
                 return;
             }
 
@@ -387,15 +387,15 @@ namespace XFileEncode
                     {
                         if(!EncryptData(data, sw, encryptSize, encodeType))
                         {
-                            XEncryptService.DebugLog("失败!" + xFileName);
+                            XService.DebugLog("失败!" + xFileName);
                             return;
                         }
-                        XEncryptService.DebugLog("输出成功!" + xFileName);
+                        XService.DebugLog("输出成功!" + xFileName);
                     }
                 }
                 catch(Exception ex)
                 {
-                    XEncryptService.DebugLog(ex.Message);
+                    XService.DebugLog(ex.Message);
                 }
             }
         }
@@ -411,22 +411,22 @@ namespace XFileEncode
         {
             if(stream == null)
             {
-                XEncryptService.DebugLog("输出流为空");
+                XService.DebugLog("输出流为空");
                 return false;
             }
 
             if(bytes == null || bytes.Length <= 0)
             {
-                XEncryptService.DebugLog("加密数据为空");
+                XService.DebugLog("加密数据为空");
                 return false;
             }
-            using(XEncryptService.EncryptScope scope = new XEncryptService.EncryptScope())
+            using(EncryptScope scope = new EncryptScope((XEncodeType)_encodeType, _encryptSize))
             {
                 byte[] encodeData;
                 scope.Begin();
                 ResultCode code = scope.EncryptData(bytes, out encodeData, encryptSize, encodeType);
                 scope.End();
-                XEncryptService.DebugLog($"State:{code}");
+                XService.DebugLog($"State:{code}");
                 if(code == ResultCode.Ok)
                 {
                     using(BinaryWriter bw = new BinaryWriter(stream))

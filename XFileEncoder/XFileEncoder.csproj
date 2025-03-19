@@ -6,8 +6,8 @@
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
     <SignAssembly>False</SignAssembly>
     <IsPublishable>True</IsPublishable>
-    <TargetFramework>netstandard2.1</TargetFramework>
-    <BaseOutputPath>E:\Work\Tools\tool\XFileEncoder\x64</BaseOutputPath>
+    <TargetFramework>.NET6</TargetFramework>
+    <BaseOutputPath>D:\Github\Y-way\xFileEncoder\x64</BaseOutputPath>
     <NoWin32Manifest>true</NoWin32Manifest>
     <Nullable>disable</Nullable>
   </PropertyGroup>
@@ -23,7 +23,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\XEncryptApi\XEncryptApi.vcxproj" />
+    <ProjectReference Include="..\XEncryptAPI\XEncryptAPI.csproj" />
+    <ProjectReference Include="..\XEncrypt\XEncrypt.vcxproj" />
   </ItemGroup>
 
 </Project>

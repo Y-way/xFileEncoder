@@ -1,8 +1,0 @@
-{
-  "profiles": {
-    "XEncrypt": {
-      "commandName": "Project",
-      "nativeDebugging": true
-    }
-  }
-}
