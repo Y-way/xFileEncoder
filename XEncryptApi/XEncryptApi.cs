@@ -4,23 +4,40 @@ namespace XEncryptAPI
 {
     public static class XService
     {
-        private const string LIBNAME = "XEncrypt.dll";
+        private const string LIBNAME = "XEncrypt";
         /// <summary>
         /// 加密文件标记
         /// </summary>
-        public static readonly uint kSignature = System.BitConverter.ToUInt32(new byte[4] { (byte)'@', (byte)'X', (byte)'F', (byte)'E' }, 0);
+        public static readonly uint kSignature = System.BitConverter.ToUInt32(new byte[4] {
+            (byte)'@', (byte)'X', (byte)'F', (byte)'E'
+        }, 0);
 
         public static void DebugLog(string format, params object[] args)
         {
             Console.WriteLine(format, args);
         }
 
+        /// <summary>
+        /// 加密/解密结果
+        /// </summary>
         [StructLayout(LayoutKind.Sequential)]
         public struct XResult
         {
-            public int code;
+            /// <summary>
+            /// 结果状态码
+            /// </summary>
+            public ResultCode code;
+            /// <summary>
+            /// 结果数据大小
+            /// </summary>
             public long size;
+            /// <summary>
+            /// 结果数据
+            /// </summary>
             public IntPtr data;
+            /// <summary>
+            /// XReult指针, 用于释放内存
+            /// </summary>
             private IntPtr result;
         }
         /// <summary>
