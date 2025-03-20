@@ -11,12 +11,6 @@
     <Filter Include="encrypt\common">
       <UniqueIdentifier>{9f79d390-f8b4-41f0-aa51-6b4eac822658}</UniqueIdentifier>
     </Filter>
-    <Filter Include="encrypt\zlib">
-      <UniqueIdentifier>{de5bea3a-ee75-4840-bb9a-c70f748f18ac}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="encrypt\xxHash">
-      <UniqueIdentifier>{a361ddaf-29b4-43ec-9e01-2cf90dec6017}</UniqueIdentifier>
-    </Filter>
     <Filter Include="encrypt\plugin">
       <UniqueIdentifier>{573a0790-084e-4575-a915-acb5aec66f4b}</UniqueIdentifier>
     </Filter>
@@ -25,6 +19,12 @@
     </Filter>
     <Filter Include="encrypt\service">
       <UniqueIdentifier>{e42ff1fe-d7ae-4270-b399-8bed9ab57845}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="encrypt\plugin\xef\zlib">
+      <UniqueIdentifier>{de5bea3a-ee75-4840-bb9a-c70f748f18ac}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="encrypt\plugin\xef\xxHash">
+      <UniqueIdentifier>{a361ddaf-29b4-43ec-9e01-2cf90dec6017}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -36,48 +36,6 @@
     </ClInclude>
     <ClInclude Include="encrypt\common\XAssert.h">
       <Filter>encrypt\common</Filter>
-    </ClInclude>
-    <ClInclude Include="encrypt\common\ZipUtils.h">
-      <Filter>encrypt\common</Filter>
-    </ClInclude>
-    <ClInclude Include="encrypt\xxHash\xxh3.h">
-      <Filter>encrypt\xxHash</Filter>
-    </ClInclude>
-    <ClInclude Include="encrypt\xxHash\xxhash.h">
-      <Filter>encrypt\xxHash</Filter>
-    </ClInclude>
-    <ClInclude Include="encrypt\zlib\crc32.h">
-      <Filter>encrypt\zlib</Filter>
-    </ClInclude>
-    <ClInclude Include="encrypt\zlib\deflate.h">
-      <Filter>encrypt\zlib</Filter>
-    </ClInclude>
-    <ClInclude Include="encrypt\zlib\gzguts.h">
-      <Filter>encrypt\zlib</Filter>
-    </ClInclude>
-    <ClInclude Include="encrypt\zlib\inffast.h">
-      <Filter>encrypt\zlib</Filter>
-    </ClInclude>
-    <ClInclude Include="encrypt\zlib\inffixed.h">
-      <Filter>encrypt\zlib</Filter>
-    </ClInclude>
-    <ClInclude Include="encrypt\zlib\inflate.h">
-      <Filter>encrypt\zlib</Filter>
-    </ClInclude>
-    <ClInclude Include="encrypt\zlib\inftrees.h">
-      <Filter>encrypt\zlib</Filter>
-    </ClInclude>
-    <ClInclude Include="encrypt\zlib\trees.h">
-      <Filter>encrypt\zlib</Filter>
-    </ClInclude>
-    <ClInclude Include="encrypt\zlib\zconf.h">
-      <Filter>encrypt\zlib</Filter>
-    </ClInclude>
-    <ClInclude Include="encrypt\zlib\zlib.h">
-      <Filter>encrypt\zlib</Filter>
-    </ClInclude>
-    <ClInclude Include="encrypt\zlib\zutil.h">
-      <Filter>encrypt\zlib</Filter>
     </ClInclude>
     <ClInclude Include="encrypt\config.h">
       <Filter>encrypt</Filter>
@@ -130,6 +88,51 @@
     <ClInclude Include="encrypt\platforms.h">
       <Filter>encrypt</Filter>
     </ClInclude>
+    <ClInclude Include="encrypt\plugin\xef\define.h">
+      <Filter>encrypt\plugin\xef</Filter>
+    </ClInclude>
+    <ClInclude Include="encrypt\plugin\xef\ZipUtils.h">
+      <Filter>encrypt\plugin\xef</Filter>
+    </ClInclude>
+    <ClInclude Include="encrypt\plugin\xef\zlib\crc32.h">
+      <Filter>encrypt\plugin\xef\zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="encrypt\plugin\xef\zlib\deflate.h">
+      <Filter>encrypt\plugin\xef\zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="encrypt\plugin\xef\zlib\gzguts.h">
+      <Filter>encrypt\plugin\xef\zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="encrypt\plugin\xef\zlib\inffast.h">
+      <Filter>encrypt\plugin\xef\zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="encrypt\plugin\xef\zlib\inffixed.h">
+      <Filter>encrypt\plugin\xef\zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="encrypt\plugin\xef\zlib\inflate.h">
+      <Filter>encrypt\plugin\xef\zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="encrypt\plugin\xef\zlib\inftrees.h">
+      <Filter>encrypt\plugin\xef\zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="encrypt\plugin\xef\zlib\trees.h">
+      <Filter>encrypt\plugin\xef\zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="encrypt\plugin\xef\zlib\zconf.h">
+      <Filter>encrypt\plugin\xef\zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="encrypt\plugin\xef\zlib\zlib.h">
+      <Filter>encrypt\plugin\xef\zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="encrypt\plugin\xef\zlib\zutil.h">
+      <Filter>encrypt\plugin\xef\zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="encrypt\plugin\xef\xxHash\xxh3.h">
+      <Filter>encrypt\plugin\xef\xxHash</Filter>
+    </ClInclude>
+    <ClInclude Include="encrypt\plugin\xef\xxHash\xxhash.h">
+      <Filter>encrypt\plugin\xef\xxHash</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="encrypt\common\Allocator.cpp">
@@ -140,57 +143,6 @@
     </ClCompile>
     <ClCompile Include="encrypt\common\XAssert.cpp">
       <Filter>encrypt\common</Filter>
-    </ClCompile>
-    <ClCompile Include="encrypt\common\ZipUtils.cpp">
-      <Filter>encrypt\common</Filter>
-    </ClCompile>
-    <ClCompile Include="encrypt\xxHash\xxhash.c">
-      <Filter>encrypt\xxHash</Filter>
-    </ClCompile>
-    <ClCompile Include="encrypt\zlib\adler32.c">
-      <Filter>encrypt\zlib</Filter>
-    </ClCompile>
-    <ClCompile Include="encrypt\zlib\compress.c">
-      <Filter>encrypt\zlib</Filter>
-    </ClCompile>
-    <ClCompile Include="encrypt\zlib\crc32.c">
-      <Filter>encrypt\zlib</Filter>
-    </ClCompile>
-    <ClCompile Include="encrypt\zlib\deflate.c">
-      <Filter>encrypt\zlib</Filter>
-    </ClCompile>
-    <ClCompile Include="encrypt\zlib\gzclose.c">
-      <Filter>encrypt\zlib</Filter>
-    </ClCompile>
-    <ClCompile Include="encrypt\zlib\gzlib.c">
-      <Filter>encrypt\zlib</Filter>
-    </ClCompile>
-    <ClCompile Include="encrypt\zlib\gzread.c">
-      <Filter>encrypt\zlib</Filter>
-    </ClCompile>
-    <ClCompile Include="encrypt\zlib\gzwrite.c">
-      <Filter>encrypt\zlib</Filter>
-    </ClCompile>
-    <ClCompile Include="encrypt\zlib\infback.c">
-      <Filter>encrypt\zlib</Filter>
-    </ClCompile>
-    <ClCompile Include="encrypt\zlib\inffast.c">
-      <Filter>encrypt\zlib</Filter>
-    </ClCompile>
-    <ClCompile Include="encrypt\zlib\inflate.c">
-      <Filter>encrypt\zlib</Filter>
-    </ClCompile>
-    <ClCompile Include="encrypt\zlib\inftrees.c">
-      <Filter>encrypt\zlib</Filter>
-    </ClCompile>
-    <ClCompile Include="encrypt\zlib\trees.c">
-      <Filter>encrypt\zlib</Filter>
-    </ClCompile>
-    <ClCompile Include="encrypt\zlib\uncompr.c">
-      <Filter>encrypt\zlib</Filter>
-    </ClCompile>
-    <ClCompile Include="encrypt\zlib\zutil.c">
-      <Filter>encrypt\zlib</Filter>
     </ClCompile>
     <ClCompile Include="encrypt\RuntimeApi.cpp">
       <Filter>encrypt</Filter>
@@ -216,16 +168,67 @@
     <ClCompile Include="encrypt\service\XService.cpp">
       <Filter>encrypt\service</Filter>
     </ClCompile>
+    <ClCompile Include="encrypt\plugin\xef\ZipUtils.cpp">
+      <Filter>encrypt\plugin\xef</Filter>
+    </ClCompile>
+    <ClCompile Include="encrypt\plugin\xef\zlib\adler32.c">
+      <Filter>encrypt\plugin\xef\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="encrypt\plugin\xef\zlib\compress.c">
+      <Filter>encrypt\plugin\xef\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="encrypt\plugin\xef\zlib\crc32.c">
+      <Filter>encrypt\plugin\xef\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="encrypt\plugin\xef\zlib\deflate.c">
+      <Filter>encrypt\plugin\xef\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="encrypt\plugin\xef\zlib\gzclose.c">
+      <Filter>encrypt\plugin\xef\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="encrypt\plugin\xef\zlib\gzlib.c">
+      <Filter>encrypt\plugin\xef\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="encrypt\plugin\xef\zlib\gzread.c">
+      <Filter>encrypt\plugin\xef\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="encrypt\plugin\xef\zlib\gzwrite.c">
+      <Filter>encrypt\plugin\xef\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="encrypt\plugin\xef\zlib\infback.c">
+      <Filter>encrypt\plugin\xef\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="encrypt\plugin\xef\zlib\inffast.c">
+      <Filter>encrypt\plugin\xef\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="encrypt\plugin\xef\zlib\inflate.c">
+      <Filter>encrypt\plugin\xef\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="encrypt\plugin\xef\zlib\inftrees.c">
+      <Filter>encrypt\plugin\xef\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="encrypt\plugin\xef\zlib\trees.c">
+      <Filter>encrypt\plugin\xef\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="encrypt\plugin\xef\zlib\uncompr.c">
+      <Filter>encrypt\plugin\xef\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="encrypt\plugin\xef\zlib\zutil.c">
+      <Filter>encrypt\plugin\xef\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="encrypt\plugin\xef\xxHash\xxhash.c">
+      <Filter>encrypt\plugin\xef\xxHash</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="encrypt\xxHash\README.md">
-      <Filter>encrypt\xxHash</Filter>
+    <None Include="encrypt\plugin\xef\zlib\README">
+      <Filter>encrypt\plugin\xef\zlib</Filter>
     </None>
-    <None Include="encrypt\zlib\README">
-      <Filter>encrypt\zlib</Filter>
+    <None Include="encrypt\plugin\xef\zlib\zlib.map">
+      <Filter>encrypt\plugin\xef\zlib</Filter>
     </None>
-    <None Include="encrypt\zlib\zlib.map">
-      <Filter>encrypt\zlib</Filter>
+    <None Include="encrypt\plugin\xef\xxHash\README.md">
+      <Filter>encrypt\plugin\xef\xxHash</Filter>
     </None>
   </ItemGroup>
 </Project>

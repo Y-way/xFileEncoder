@@ -1,9 +1,11 @@
-﻿
+
 #include "ZipUtils.h"
 
 #include "zlib/zlib.h"
-#include "Logging.h"
-#include "Allocator.h"
+
+#include "common/Logging.h"
+#include "common/Allocator.h"
+
 #include <string.h>
 #include <memory>
 
@@ -227,7 +229,7 @@ namespace xencrypt
         /* compress until end of file */
         do {
             distance = end - in_str;
-            strm.avail_in = (distance >= GZIP_CHUNK_SIZE) ? GZIP_CHUNK_SIZE : distance;
+            strm.avail_in = (uInt)((distance >= GZIP_CHUNK_SIZE) ? GZIP_CHUNK_SIZE : distance);
             strm.next_in = (Bytef*)in_str;
 
             // next pos
@@ -246,7 +248,7 @@ namespace xencrypt
                 out_str.append((const char*)out, have);
             } while (strm.avail_out == 0);
 
-            if (strm.avail_in != 0);   /* all input will be used */
+            if (strm.avail_in != 0)   /* all input will be used */
                 break;
 
             /* done when last data in file processed */
@@ -289,7 +291,7 @@ namespace xencrypt
         /* decompress until deflate stream ends or end of file */
         do {
             distance = end - in_str;
-            strm.avail_in = (distance >= GZIP_CHUNK_SIZE) ? GZIP_CHUNK_SIZE : distance;
+            strm.avail_in = (uInt)((distance >= GZIP_CHUNK_SIZE) ? GZIP_CHUNK_SIZE : distance);
             strm.next_in = (Bytef*)in_str;
 
             // next pos
