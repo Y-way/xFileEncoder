@@ -51,8 +51,11 @@ namespace XFileEncoder
         static void PrintUsage()
         {
             XService.DebugLog("Usage:");
-            XService.DebugLog("XFileEncoder encrypt|decrypt -load FileName [-out OutputFileName] [-encrypt-size size] [-encode-type type]");
-            XService.DebugLog("\tencrypt|decrypt:加密/解密文件,必须参数");
+            XService.DebugLog("XFileEncoder command args");
+            XService.DebugLog("\tcommand:执行命令,必须参数");
+            XService.DebugLog("\t\tencrypt:加密命令");
+            XService.DebugLog("\t\tdecrypt:解密命令");
+            XService.DebugLog("\targs:命令参数");
             XService.DebugLog("\t\t-load:加载欲加密文件,必须参数");
             XService.DebugLog("\t\t-out:输出文件名字.可选参数,默认文件名out.xfe");
             XService.DebugLog("\t\t-encrypt-size:加密数据长度,可选参数,默认16字节. 取值范围:Min(Clamp(encrypt-size, 1, 255), file_size)");
