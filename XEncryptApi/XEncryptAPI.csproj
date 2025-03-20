@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>.NET6</TargetFramework>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
-    <BaseOutputPath>D:\Github\Y-way\xFileEncoder\x64</BaseOutputPath>
+    <BaseOutputPath>..\x64</BaseOutputPath>
   </PropertyGroup>
 
 </Project>

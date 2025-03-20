@@ -7,7 +7,7 @@
     <SignAssembly>False</SignAssembly>
     <IsPublishable>True</IsPublishable>
     <TargetFramework>.NET6</TargetFramework>
-    <BaseOutputPath>D:\Github\Y-way\xFileEncoder\x64</BaseOutputPath>
+    <BaseOutputPath>..\x64</BaseOutputPath>
     <NoWin32Manifest>true</NoWin32Manifest>
     <Nullable>disable</Nullable>
   </PropertyGroup>
