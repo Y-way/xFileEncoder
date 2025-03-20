@@ -213,19 +213,15 @@ namespace XFileEncode
 
         static bool IsXEncryptFile(string fileName)
         {
-            using(FileStream fs = new FileStream(fileName, FileMode.Open, FileAccess.Read))
+            using FileStream fs = new FileStream(fileName, FileMode.Open, FileAccess.Read);
+            if(fs.Length < sizeof(uint))
             {
-                if(fs.Length < sizeof(uint))
-                {
-                    return false;
-                }
-                using(BinaryReader br = new System.IO.BinaryReader(fs))
-                {
-
-                    uint data = br.ReadUInt32();
-                    return XService.kSignature == data;
-                }
+                return false;
             }
+            using BinaryReader br = new System.IO.BinaryReader(fs);
+
+            uint data = br.ReadUInt32();
+            return XService.kSignature == data;
         }
         #region 解密
         /// <summary>
@@ -271,35 +267,31 @@ namespace XFileEncode
             }
 
             //Decrypt the source file.
-            using(FileStream sourceStream = new FileStream(source, FileMode.Open))
+            using FileStream sourceStream = new FileStream(source, FileMode.Open);
+            try
             {
-                try
-                {
-                    long lSize = sourceStream.Length;
-                    byte[] data = new byte[lSize];
-                    sourceStream.Read(data, 0, (int)lSize);
-                    sourceStream.Close();
+                long lSize = sourceStream.Length;
+                byte[] data = new byte[lSize];
+                sourceStream.Read(data, 0, (int)lSize);
+                sourceStream.Close();
 
-                    MemoryStream memory = new MemoryStream(data);
+                MemoryStream memory = new MemoryStream(data);
 
-                    if(!DecryptData(memory, out var buffer))
-                    {
-                        return;
-                    }
-                    using(FileStream sw = new FileStream(xFileName, FileMode.Create))
-                    {
-                        using(BinaryWriter writer = new BinaryWriter(sw))
-                        {
-                            writer.Write(buffer);
-                            writer.Flush();
-                        }
-                        XService.DebugLog("输出成功!" + xFileName);
-                    }
-                }
-                catch(Exception ex)
+                if(!DecryptData(memory, out var buffer))
                 {
-                    XService.DebugLog(ex.Message);
+                    return;
                 }
+                using FileStream sw = new FileStream(xFileName, FileMode.Create);
+                using(BinaryWriter writer = new BinaryWriter(sw))
+                {
+                    writer.Write(buffer);
+                    writer.Flush();
+                }
+                XService.DebugLog("输出成功!" + xFileName);
+            }
+            catch(Exception ex)
+            {
+                XService.DebugLog(ex.Message);
             }
         }
         /// <summary>
@@ -319,14 +311,12 @@ namespace XFileEncode
             byte[] rawdata = new byte[stream.Length];
             stream.Read(rawdata, 0, rawdata.Length);
 
-            using(DecryptScope scope = new DecryptScope((XEncodeType)_encodeType, _encryptSize))
-            {
-                scope.Begin();
-                ResultCode code = scope.DecryptData(rawdata, out bytes);
-                scope.End();
-                XService.DebugLog($"State:{code}");
-                return code == ResultCode.Ok;
-            }
+            using DecryptScope scope = new DecryptScope((XEncodeType)_encodeType, _encryptSize);
+            scope.Begin();
+            ResultCode code = scope.DecryptData(rawdata, out bytes);
+            scope.End();
+            XService.DebugLog($"State:{code}");
+            return code == ResultCode.Ok;
         }
         #endregion
 
@@ -376,28 +366,24 @@ namespace XFileEncode
             }
 
             ///Encode the source file.
-            using(FileStream sourceStream = File.Open(source, FileMode.Open))
+            using FileStream sourceStream = File.Open(source, FileMode.Open);
+            try
             {
-                try
+                long lSize = sourceStream.Length;
+                byte[] data = new byte[lSize];
+                sourceStream.Read(data, 0, (int)lSize);
+                sourceStream.Close();
+                using FileStream sw = new FileStream(xFileName, FileMode.Create);
+                if(!EncryptData(data, sw, encryptSize, encodeType))
                 {
-                    long lSize = sourceStream.Length;
-                    byte[] data = new byte[lSize];
-                    sourceStream.Read(data, 0, (int)lSize);
-                    sourceStream.Close();
-                    using(FileStream sw = new FileStream(xFileName, FileMode.Create))
-                    {
-                        if(!EncryptData(data, sw, encryptSize, encodeType))
-                        {
-                            XService.DebugLog("失败!" + xFileName);
-                            return;
-                        }
-                        XService.DebugLog("输出成功!" + xFileName);
-                    }
+                    XService.DebugLog("失败!" + xFileName);
+                    return;
                 }
-                catch(Exception ex)
-                {
-                    XService.DebugLog(ex.Message);
-                }
+                XService.DebugLog("输出成功!" + xFileName);
+            }
+            catch(Exception ex)
+            {
+                XService.DebugLog(ex.Message);
             }
         }
         /// <summary>
@@ -421,23 +407,18 @@ namespace XFileEncode
                 XService.DebugLog("加密数据为空");
                 return false;
             }
-            using(EncryptScope scope = new EncryptScope((XEncodeType)_encodeType, _encryptSize))
+            using EncryptScope scope = new EncryptScope((XEncodeType)_encodeType, _encryptSize);
+            scope.Begin();
+            ResultCode code = scope.EncryptData(bytes, out var encodeData, encryptSize, encodeType);
+            scope.End();
+            XService.DebugLog($"State:{code}");
+            if(code == ResultCode.Ok)
             {
-                byte[] encodeData;
-                scope.Begin();
-                ResultCode code = scope.EncryptData(bytes, out encodeData, encryptSize, encodeType);
-                scope.End();
-                XService.DebugLog($"State:{code}");
-                if(code == ResultCode.Ok)
-                {
-                    using(BinaryWriter bw = new BinaryWriter(stream))
-                    {
-                        bw.Write(encodeData, 0, encodeData.Length);
-                        bw.Flush();
-                    }
-                }
-                return code == ResultCode.Ok;
+                using BinaryWriter bw = new BinaryWriter(stream);
+                bw.Write(encodeData, 0, encodeData.Length);
+                bw.Flush();
             }
+            return code == ResultCode.Ok;
         }
         #endregion
     }
