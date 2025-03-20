@@ -2,7 +2,7 @@ using System;
 using System.Runtime.InteropServices;
 namespace XEncryptAPI
 {
-    public static class XService
+    public sealed class XService : IDisposable
     {
         private const string LIBNAME = "XEncrypt";
         /// <summary>
@@ -40,24 +40,52 @@ namespace XEncryptAPI
             /// </summary>
             private IntPtr result;
         }
-        /// <summary>
-        /// 创建XEF格式加密/解密器插件实例 <br />
-        /// void* xef_plugin_create(int type, uint8_t encryptSize)
-        /// </summary>
-        /// <param name="type">数据加密编码类型</param>
-        /// <param name="encryptSize">数据加密长度</param>
-        /// <returns>插件实例指针</returns>
-        [DllImport(LIBNAME, EntryPoint = "xef_plugin_create", CallingConvention = CallingConvention.Cdecl)]
-        public static extern IntPtr XEFPluginCreate(int type, byte encryptSize);
 
-        /// <summary>
-        /// 销毁XEF格式 加密/解密插件实例 <br />
-        /// void xef_plugin_destroy(void* plugin)
-        /// </summary>
-        /// <param name="plugin">已创建的插件实例</param>
-        [DllImport(LIBNAME, EntryPoint = "xef_plugin_destroy", CallingConvention = CallingConvention.Cdecl)]
-        public static extern void XEFPluginDestroy(IntPtr plugin);
+        private IntPtr _service;
 
+        public XService(IPlugin plugin)
+        {
+            _service = XService.Initialize(plugin.Native);
+        }
+
+        public unsafe bool IsEncrypted(byte[] data, long size)
+        {
+            fixed(byte* ptr = data)
+            {
+                return XService.IsEncrypted(_service, ptr, size);
+            }
+        }
+
+        public unsafe XResult Encrypt(byte[] data, long size)
+        {
+            fixed(byte* ptr = data)
+            {
+                return XService.Encrypt(_service, ptr, data.Length);
+            }
+        }
+
+        public unsafe XResult Decrypt(byte[] data, long size)
+        {
+            fixed(byte* ptr = data)
+            {
+                return XService.Decrypt(_service, ptr, data.Length);
+            }
+        }
+
+        public unsafe void Release(XResult result)
+        {
+            XService.ReleaseResult(_service, ref result);
+        }
+
+        public void Dispose()
+        {
+            if(_service != IntPtr.Zero)
+            {
+                Deinitialize(_service);
+            }
+            _service = IntPtr.Zero;
+        }
+        #region Native API
         /// <summary>
         /// 初始化服务 <br />
         /// void* xencrypt_service_initialize(void* plugin)
@@ -112,5 +140,6 @@ namespace XEncryptAPI
         /// <param name="service">加密/解密服务实例</param>
         [DllImport(LIBNAME, EntryPoint = "xencrypt_service_deinitialize", CallingConvention = CallingConvention.Cdecl)]
         public static extern unsafe void Deinitialize(IntPtr service);
+        #endregion
     }
 }

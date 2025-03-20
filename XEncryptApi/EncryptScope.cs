@@ -11,12 +11,12 @@ namespace XEncryptAPI
     {
         IntPtr _plugin = IntPtr.Zero;
         IntPtr _service = IntPtr.Zero;
-        public EncryptScope(XEncodeType type, byte encryptSize = 16)
+        public EncryptScope(XEFPlugin.XEncodeType type, byte encryptSize = 16)
         {
 #if DEBUG
             DebugLog("EncryptScope Initialize");
 #endif
-            _plugin = XService.XEFPluginCreate((int)type, encryptSize);
+            _plugin = XEFPlugin.Create(type, encryptSize);
         }
 
         public void Begin()
@@ -27,7 +27,7 @@ namespace XEncryptAPI
             _service = XService.Initialize(_plugin);
         }
 
-        public ResultCode EncryptData(byte[] rawdata, out byte[] data, byte encryptSize = 16, XEncodeType type = XEncodeType.XNone)
+        public ResultCode EncryptData(byte[] rawdata, out byte[] data, byte encryptSize = 16, XEFPlugin.XEncodeType type = XEFPlugin.XEncodeType.XNone)
         {
 #if DEBUG
             DebugLog("EncryptScope EncryptData");
@@ -77,7 +77,7 @@ namespace XEncryptAPI
 #endif
             if(_plugin != IntPtr.Zero)
             {
-                XService.XEFPluginDestroy(_plugin);
+                XEFPlugin.Destroy(_plugin);
             }
             _plugin = IntPtr.Zero;
         }

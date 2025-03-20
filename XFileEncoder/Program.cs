@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using XEncryptAPI;
+using static XEncryptAPI.XEFPlugin;
 
 namespace XFileEncode
 {
@@ -337,7 +338,7 @@ namespace XFileEncode
         /// <param name="xFileName">加密输出文件名</param>
         /// <param name="encryptSize">加密数据长度</param>
         /// <param name="encodeType">源文件数据加密格式</param>
-        public static void Encrypt(string source, string xFileName, byte encryptSize = 16, XEncodeType encodeType = XEncodeType.XNone)
+        public static void Encrypt(string source, string xFileName, byte encryptSize = 16, XEFPlugin.XEncodeType encodeType = XEncodeType.XNone)
         {
             if(string.IsNullOrWhiteSpace(source)
                 || string.IsNullOrWhiteSpace(xFileName))
@@ -407,7 +408,7 @@ namespace XFileEncode
         /// <param name="encryptSize">加密数据长度</param>
         /// <param name="encodeType">源文件数据加密格式</param>
         /// <returns>加密成功,返回true,否则返回false</returns>
-        public static bool EncryptData(byte[] bytes, Stream stream, byte encryptSize = 16, XEncodeType encodeType = XEncodeType.XGZip)
+        public static bool EncryptData(byte[] bytes, Stream stream, byte encryptSize = 16, XEFPlugin.XEncodeType encodeType = XEncodeType.XGZip)
         {
             if(stream == null)
             {
