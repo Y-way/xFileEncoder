@@ -3,7 +3,7 @@
     "XFileEncoder": {
       "commandName": "Project",
       "commandLineArgs": "encrypt -load global-metadata.dat -out global-metadata.xef -encode-type zip",
-      "workingDirectory": "D:\\Github\\Y-way\\xFileEncoder\\x64",
+      "workingDirectory": "..\\x64",
       "nativeDebugging": true
     }
   }
