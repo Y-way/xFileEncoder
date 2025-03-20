@@ -5,11 +5,6 @@ namespace XEncryptAPI
 {
     public sealed class XEFPlugin : IPlugin, IDisposable
     {
-        /// <summary>
-        /// 加密文件标记
-        /// </summary>
-        public static readonly uint kSignature = System.BitConverter.ToUInt32(new byte[4] { (byte)'@', (byte)'X', (byte)'F', (byte)'E' }, 0);
-
         #region C# API
         private IntPtr _native;
         /// <summary>

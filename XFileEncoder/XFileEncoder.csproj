@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <StartupObject>XFileEncode.Program</StartupObject>
+    <StartupObject>XFileEncoder.Program</StartupObject>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
     <SignAssembly>False</SignAssembly>
     <IsPublishable>True</IsPublishable>
