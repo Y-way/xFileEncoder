@@ -142,7 +142,7 @@ namespace XEncryptAPI
         /// <param name="size">密数据长度</param>
         /// <returns>解密结果实例指针</returns>
         [DllImport(NativeLibrary.Name, EntryPoint = "xencrypt_service_decrypt", CallingConvention = CallingConvention.Cdecl)]
-        public static extern unsafe XResult Decrypt(IntPtr service, byte* inData, long size);
+        public static extern unsafe XResult Decrypt(IntPtr service, byte* inData, long size, bool cloneInput = false);
         /// <summary>
         /// 销毁结果 <br />
         /// void xencrypt_service_release_result(void* service, void* result)
