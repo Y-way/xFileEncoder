@@ -221,7 +221,7 @@ namespace XFileEncode
             using BinaryReader br = new System.IO.BinaryReader(fs);
 
             uint data = br.ReadUInt32();
-            return XService.kSignature == data;
+            return XEFPlugin.kSignature == data;
         }
         #region 解密
         /// <summary>

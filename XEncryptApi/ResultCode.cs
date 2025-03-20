@@ -1,4 +1,4 @@
-namespace XEncryptAPI
+﻿namespace XEncryptAPI
 {
     /// <summary>
     /// 加密/解密结果状态码

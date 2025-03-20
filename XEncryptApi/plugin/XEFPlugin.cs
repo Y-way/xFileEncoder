@@ -5,8 +5,12 @@ namespace XEncryptAPI
 {
     public sealed class XEFPlugin : IPlugin, IDisposable
     {
-        private const string LIBNAME = "XEncrypt";
+        /// <summary>
+        /// 加密文件标记
+        /// </summary>
+        public static readonly uint kSignature = System.BitConverter.ToUInt32(new byte[4] { (byte)'@', (byte)'X', (byte)'F', (byte)'E' }, 0);
 
+        #region C# API
         private IntPtr _native;
         /// <summary>
         /// 加密服务时,源数据加密编码格式
@@ -38,7 +42,10 @@ namespace XEncryptAPI
             }
             _native = IntPtr.Zero;
         }
+        #endregion
+
         #region Native API
+
         /// <summary>
         /// 创建XEF格式加密/解密器插件实例 <br />
         /// void* xef_plugin_create(int type, uint8_t encryptSize)
@@ -46,7 +53,7 @@ namespace XEncryptAPI
         /// <param name="type">数据加密编码类型</param>
         /// <param name="encryptSize">数据加密长度</param>
         /// <returns>插件实例指针</returns>
-        [DllImport(LIBNAME, EntryPoint = "xef_plugin_create", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(NativeLibrary.Name, EntryPoint = "xef_plugin_create", CallingConvention = CallingConvention.Cdecl)]
         public static extern IntPtr Create(XEncodeType type, byte encryptSize);
 
         /// <summary>
@@ -54,7 +61,7 @@ namespace XEncryptAPI
         /// void xef_plugin_destroy(void* plugin)
         /// </summary>
         /// <param name="plugin">已创建的插件实例</param>
-        [DllImport(LIBNAME, EntryPoint = "xef_plugin_destroy", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(NativeLibrary.Name, EntryPoint = "xef_plugin_destroy", CallingConvention = CallingConvention.Cdecl)]
         public static extern void Destroy(IntPtr plugin);
     }
     #endregion

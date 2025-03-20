@@ -4,19 +4,6 @@ namespace XEncryptAPI
 {
     public sealed class XService : IDisposable
     {
-        private const string LIBNAME = "XEncrypt";
-        /// <summary>
-        /// 加密文件标记
-        /// </summary>
-        public static readonly uint kSignature = System.BitConverter.ToUInt32(new byte[4] {
-            (byte)'@', (byte)'X', (byte)'F', (byte)'E'
-        }, 0);
-
-        public static void DebugLog(string format, params object[] args)
-        {
-            Console.WriteLine(format, args);
-        }
-
         /// <summary>
         /// 加密/解密结果
         /// </summary>
@@ -41,6 +28,7 @@ namespace XEncryptAPI
             private IntPtr result;
         }
 
+        #region C# API
         private IntPtr _service;
 
         public XService(IPlugin plugin)
@@ -85,6 +73,37 @@ namespace XEncryptAPI
             }
             _service = IntPtr.Zero;
         }
+        #endregion
+
+        #region Log
+        public static void DebugLog(string format, params object[] args)
+        {
+#if UNITY_EDITOR
+            UnityEngine.Debug.LogFormat(format, args);
+#else
+            Console.WriteLine(format, args);
+#endif
+        }
+
+        public static void DebugWarn(string format, params object[] args)
+        {
+#if UNITY_EDITOR
+            UnityEngine.Debug.LogWarningFormat(format, args);
+#else
+            Console.WriteLine(format, args);
+#endif
+        }
+
+        public static void DebugError(string format, params object[] args)
+        {
+#if UNITY_EDITOR
+            UnityEngine.Debug.LogErrorFormat(format, args);
+#else
+            Console.WriteLine(format, args);
+#endif
+        }
+        #endregion
+
         #region Native API
         /// <summary>
         /// 初始化服务 <br />
@@ -92,7 +111,7 @@ namespace XEncryptAPI
         /// </summary>
         /// <param name="plugin">加密/解密插件实例</param>
         /// <returns>加密/解密服务实例</returns>
-        [DllImport(LIBNAME, EntryPoint = "xencrypt_service_initialize", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(NativeLibrary.Name, EntryPoint = "xencrypt_service_initialize", CallingConvention = CallingConvention.Cdecl)]
         public static extern IntPtr Initialize(IntPtr plugin);
 
         /// <summary>
@@ -103,7 +122,7 @@ namespace XEncryptAPI
         /// <param name="data">内存数据地址</param>
         /// <param name="size">数据长度</param>
         /// <returns>数据是否已加密.返回true,数据已加密,否则,未加密.</returns>
-        [DllImport(LIBNAME, EntryPoint = "xencrypt_service_is_encrypted", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(NativeLibrary.Name, EntryPoint = "xencrypt_service_is_encrypted", CallingConvention = CallingConvention.Cdecl)]
         public static extern unsafe bool IsEncrypted(IntPtr service, byte* data, long size);
         /// <summary>
         /// 加密数据 <br />
@@ -112,7 +131,7 @@ namespace XEncryptAPI
         /// <param name="inData">待加密数据</param>
         /// <param name="size">待加密数据长度</param>
         /// <returns>解密结果实例指针</returns>
-        [DllImport(LIBNAME, EntryPoint = "xencrypt_service_encrypt", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(NativeLibrary.Name, EntryPoint = "xencrypt_service_encrypt", CallingConvention = CallingConvention.Cdecl)]
         public static extern unsafe XResult Encrypt(IntPtr service, byte* inData, long size);
         /// <summary>
         /// 解密数据 <br />
@@ -122,7 +141,7 @@ namespace XEncryptAPI
         /// <param name="inData">待解密数据</param>
         /// <param name="size">密数据长度</param>
         /// <returns>解密结果实例指针</returns>
-        [DllImport(LIBNAME, EntryPoint = "xencrypt_service_decrypt", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(NativeLibrary.Name, EntryPoint = "xencrypt_service_decrypt", CallingConvention = CallingConvention.Cdecl)]
         public static extern unsafe XResult Decrypt(IntPtr service, byte* inData, long size);
         /// <summary>
         /// 销毁结果 <br />
@@ -131,14 +150,14 @@ namespace XEncryptAPI
         /// <param name="service">加密/解密服务实例</param>
         /// <param name="result">加/解密结果指针</param>
         /// <returns></returns>
-        [DllImport(LIBNAME, EntryPoint = "xencrypt_service_release_result", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(NativeLibrary.Name, EntryPoint = "xencrypt_service_release_result", CallingConvention = CallingConvention.Cdecl)]
         public static extern unsafe void ReleaseResult(IntPtr service, ref XResult result);
         /// <summary>
         /// 注销服务 <br />
         /// void xencrypt_service_deinitialize(void* service)
         /// </summary>
         /// <param name="service">加密/解密服务实例</param>
-        [DllImport(LIBNAME, EntryPoint = "xencrypt_service_deinitialize", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(NativeLibrary.Name, EntryPoint = "xencrypt_service_deinitialize", CallingConvention = CallingConvention.Cdecl)]
         public static extern unsafe void Deinitialize(IntPtr service);
         #endregion
     }
