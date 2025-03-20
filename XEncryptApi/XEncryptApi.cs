@@ -72,7 +72,7 @@ namespace XEncryptAPI
             }
         }
 
-        public unsafe void Release(XResult result)
+        public unsafe void ReleaseResult(XResult result)
         {
             XService.ReleaseResult(_service, ref result);
         }
