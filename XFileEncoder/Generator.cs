@@ -39,7 +39,7 @@ namespace XFileEncoder
                 }
                 else if(_cmd == 1)
                 {
-                    Decrypt(_xFile, _outFile, _encryptSize, (XEncodeType)_encodeType);
+                    Decrypt(_xFile, _outFile);
                 }
             }
             catch(Exception ex)
@@ -226,7 +226,7 @@ namespace XFileEncoder
         /// </summary>
         /// <param name="source">加密文件名</param>
         /// <param name="xFileName">解密输出文件名</param>
-        public static void Decrypt(string source, string xFileName, byte encryptSize = 16, XEFPlugin.XEncodeType type = XEncodeType.XNone)
+        public static void Decrypt(string source, string xFileName)
         {
             if(string.IsNullOrWhiteSpace(source) ||
                 string.IsNullOrWhiteSpace(xFileName))
@@ -268,7 +268,7 @@ namespace XFileEncoder
 
                 MemoryStream memory = new MemoryStream(data);
 
-                if(!DecryptData(memory, out var buffer, encryptSize, type))
+                if(!DecryptData(memory, out var buffer))
                 {
                     return;
                 }
@@ -291,7 +291,7 @@ namespace XFileEncoder
         /// <param name="stream"></param>
         /// <param name="bytes"></param>
         /// <returns>解密成功,返回true,否则返回false</returns>
-        public static bool DecryptData(Stream stream, out byte[] bytes, byte encryptSize = 16, XEFPlugin.XEncodeType type = XEncodeType.XNone)
+        public static bool DecryptData(Stream stream, out byte[] bytes)
         {
             bytes = null;
             if(stream == null)
@@ -302,7 +302,7 @@ namespace XFileEncoder
             byte[] rawdata = new byte[stream.Length];
             stream.Read(rawdata, 0, rawdata.Length);
 
-            using DecryptScope scope = new DecryptScope(type, encryptSize);
+            using DecryptScope scope = new DecryptScope();
             scope.Begin();
             ResultCode code = scope.DecryptData(rawdata, out bytes);
             scope.End();
