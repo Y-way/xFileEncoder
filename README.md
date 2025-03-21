@@ -39,3 +39,7 @@ XFileEncoder command args
         XFileEncoder edcrypt -load test.png -out test.png
 
 ```
+
+**********
+
+# 该项目已迁移到[x-encrypt](https://github.com/Y-way/x-encrypt/tree/main/C%23)
